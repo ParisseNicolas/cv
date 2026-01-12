@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>CV – Nicolas Parisse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="CV de Nicolas Parisse, QA Automation Engineer spécialisé en Cypress, tests API et intégration CI/CD." />
+
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --bg-card: #ffffff;
+      --primary: #3c6fd1;
+      --primary-soft: #dbe5ff;
+      --accent: #ffb8b8;
+      --text-main: #202333;
+      --text-soft: #6d7485;
+      --chip-bg: #eef0f7;
+      --border-soft: #e2e4ee;
+      --shadow-soft: 0 14px 35px rgba(15, 35, 52, 0.08);
+      --radius-card: 24px;
+      --radius-pill: 999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Conteneur type "tiktok" centré, max 480px */
+    .app {
+      width: 100%;
+      max-width: 480px;
+      padding: env(safe-area-inset-top, 16px) 12px env(safe-area-inset-bottom, 16px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    header.app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 4px 0;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+
+    .tag-pill {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(60, 111, 209, 0.07);
+      font-size: 11px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Zone cartes scrollables */
+    .feed {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-bottom: 8px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 0 0, rgba(60,111,209,0.12), transparent 60%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Carte profil (plein écran-ish) */
+    .card--hero {
+      padding-top: 22px;
+      padding-bottom: 20px;
+    }
+
+    .hero-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #c9d6ff, #e2e2ff);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6370b5;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .avatar-badge {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      box-shadow: 0 6px 14px rgba(31, 66, 138, 0.4);
+    }
+
+    .hero-info h1 {
+      margin: 0 0 2px;
+      font-size: 20px;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-info h1 span {
+      font-weight: 500;
+    }
+
+    .hero-role {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .hero-location {
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .chips-row {
+      margin: 14px 0 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      border-radius: var(--radius-pill);
+      padding: 4px 9px;
+      background: var(--chip-bg);
+      font-size: 11px;
+      color: var(--text-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--primary);
+    }
+
+    .hero-quote {
+      font-size: 12px;
+      color: var(--text-soft);
+      line-height: 1.4;
+      border-left: 2px solid var(--primary-soft);
+      padding-left: 10px;
+      margin-top: 4px;
+    }
+
+    /* Section titre */
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 650;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .section-title span {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--primary);
+      letter-spacing: 0.14em;
+    }
+
+    /* Compétences visuelles */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .skill-pill {
+      border-radius: 16px;
+      border: 1px solid var(--border-soft);
+      padding: 8px 9px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .skill-main {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .skill-name {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .skill-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .skill-meter {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: conic-gradient(var(--primary) var(--value), #eef1ff var(--value));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .skill-meter span {
+      background: white;
+      border-radius: 999px;
+      padding: 2px 5px;
+      box-shadow: 0 0 0 2px #f3f4ff;
+    }
+
+    /* Outils / Langues */
+    .mini-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .mini-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .mini-label {
+      font-weight: 500;
+    }
+
+    .bar {
+      flex: 1;
+      height: 5px;
+      border-radius: 999px;
+      background: #eceff7;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar-fill {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--primary), #8d9cff);
+      transform-origin: left center;
+      transform: scaleX(var(--level));
+    }
+
+    .lang-note {
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-left: 2px;
+    }
+
+    /* Expérience */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .xp-item {
+      position: relative;
+      padding-left: 16px;
+    }
+
+    .xp-item::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--primary);
+    }
+
+    .xp-item::after {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 14px;
+      bottom: -6px;
+      width: 1px;
+      background: rgba(32, 35, 51, 0.08);
+    }
+
+    .xp-item:last-child::after {
+      display: none;
+    }
+
+    .xp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 2px;
+    }
+
+    .xp-role {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .xp-date {
+      font-size: 11px;
+      color: var(--text-soft);
+      white-space: nowrap;
+    }
+
+    .xp-company {
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+
+    .xp-bullets {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      font-size: 12px;
+      color: var(--text-main);
+    }
+
+    .xp-bullets li {
+      margin: 2px 0;
+    }
+
+    .xp-bullets strong {
+      font-weight: 600;
+    }
+
+    /* International / Formation */
+    .tag-card {
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 8px 9px;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .tag-title {
+      font-weight: 600;
+    }
+
+    .tag-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .tag-meta {
+      font-size: 11px;
+      color: var(--primary);
+    }
+
+    .tag-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    /* Footer contacts */
+    .contact-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-soft);
+      text-decoration: none;
+    }
+
+    .contact-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: rgba(60, 111, 209, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--primary);
+    }
+
+    .contact-label {
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .contact-value {
+      color: var(--text-soft);
+      font-size: 11px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:active {
+      opacity: 0.7;
+    }
+
+    /* Petite barre de navigation / indicateur */
+    .nav-dots {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .nav-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: #ccd1e5;
+    }
+
+    .nav-dot--active {
+      width: 16px;
+      background: var(--primary);
+    }
+
+    @media (min-width: 768px) {
+      .app {
+        padding-top: 32px;
+        padding-bottom: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="logo-text">CV &middot; NICOLAS PARISSE</div>
+      <div class="tag-pill">QA Automation &middot; Cypress · API</div>
+    </header>
+
+    <main class="feed">
+      <!-- HERO / PROFIL -->
+      <section class="card card--hero">
+        <div class="card-inner">
+          <div class="hero-header">
+            <div class="avatar">
+              <!-- Remplace src par ton vrai chemin d'image -->
+              <!-- <img src="photo.jpeg" alt="Photo de Nicolas Parisse" /> -->
+              NP
+              <div class="avatar-badge">32</div>
+            </div>
+            <div class="hero-info">
+              <h1>Nicolas <span>Parisse</span></h1>
+              <div class="hero-role">QA Automation Engineer</div>
+              <div class="hero-location">Paris, Île-de-France, France</div>
+            </div>
+          </div>
+
+          <div class="chips-row">
+            <div class="chip"><span class="chip-dot"></span>Cypress</div>
+            <div class="chip"><span class="chip-dot"></span>Tests API &ndash; Bruno</div>
+            <div class="chip"><span class="chip-dot"></span>CI/CD Azure DevOps</div>
+            <div class="chip"><span class="chip-dot"></span>Angular &middot; .NET Core</div>
+            <div class="chip"><span class="chip-dot"></span>Bash &amp; PowerShell</div>
+          </div>
+
+          <p class="hero-quote">
+            Automatiser intelligemment, c’est assurer la qualité des procédés critiques.<br />
+            Ingénieur QA Automation spécialisé en Cypress, tests API et intégration CI/CD,
+            avec expérience sur projets à forte volumétrie et internationaux
+            (parcours critiques E2E, API, sécurité applicative, CI/CD intégrée).
+          </p>
+        </div>
+      </section>
+
+      <!-- COMPÉTENCES -->
+      <section class="card">
+        <div class="card-inner">
+          <div class="section-label">Compétences clés</div>
+          <div class="section-title">
+            QA Automation
+            <span>cypress &amp; api testing</span>
+          </div>
+
+          <div class="skills-grid">
+            <div class="skill-pill" style="--value: 0.90turn;">
+              <div class="skill-main">
+                <div class="skill-name">Cypress</div>
+                <div class="skill-sub">UI / Component / E2E</div>
+              </div>
+              <div class="skill-meter"><span>90</span></div>
+            </div>
+
+            <div class="skill-pill" style="--value: 0.95turn;">
+              <div class="skill-main">
+                <div class="skill-name">Bruno</div>
+                <div class="skill-sub">Tests API</div>
+              </div>
+              <div class="skill-meter"><span>95</span></div>
+            </div>
+
+            <div class="skill-pill" style="--value: 0.80turn;">
+              <div class="skill-main">
+                <div class="skill-name">CI/CD</div>
+                <div class="skill-sub">Azure DevOps</div>
+              </div>
+              <div class="skill-meter"><span>80</span></div>
+            </div>
+
+            <div class="skill-pill" style="--value: 0.75turn;">
+              <div class="skill-main">
+                <div class="skill-name">Frontend</div>
+                <div class="skill-sub">Angular</div>
+              </div>
+              <div class="skill-meter"><span>75</span></div>
+            </div>
+
+            <div class="skill-pill" style="--value: 0.75turn;">
+              <div class="skill-main">
+                <div class="skill-name">Backend</div>
+                <div class="skill-sub">.NET Core</div>
+              </div>
+              <div class="skill-meter"><span>75</span></div>
+            </div>
+
+            <div class="skill-pill" style="--value: 0.85turn;">
+              <div class="skill-main">
+                <div class="skill-name">Scripting</div>
+                <div class="skill-sub">Bash / PowerShell</div>
+              </div>
+              <div class="skill-meter"><span>85</span></div>
+            </div>
+          </div>
+
+          <div class="section-label" style="margin-top: 14px;">Outils &amp; méthodes</div>
+          <div class="mini-list">
+            <div class="mini-row">
+              <div class="mini-label">Git</div>
+              <div class="bar" style="--level: 0.22;">
+                <div class="bar-fill"></div>
+              </div>
+            </div>
+            <div class="mini-row">
+              <div class="mini-label">Sécurité (SAST, SCA, IaC)</div>
+              <div class="bar" style="--level: 0.18;">
+                <div class="bar-fill"></div>
+              </div>
+            </div>
+            <div class="mini-row">
+              <div class="mini-label">Agile (Epic, US, Sprint)</div>
+              <div class="bar" style="--level: 0.15;">
+                <div class="bar-fill"></div>
+              </div>
+            </div>
+            <div class="mini-row">
+              <div class="mini-label">IA (Copilot)</div>
+              <div class="bar" style="--level: 0.22;">
+                <div class="bar-fill"></div>
+              </div>
+            </div>
+            <div class="mini-row">
+              <div class="mini-label">ISTQB</div>
+              <div class="bar" style="--level: 0.21;">
+                <div class="bar-fill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LANGUES -->
+      <section class="card">
+        <div class="card-inner">
+          <div class="section-label">Langues</div>
+          <div class="section-title">
+            Communication
+            <span>fr / en</span>
+          </div>
+
+          <div class="mini-list">
+            <div class="mini-row">
+              <div>
+                <div class="mini-label">Français</div>
+                <div class="lang-note">C2 &ndash; langue maternelle</div>
+              </div>
+              <div class="bar" style="--level: 1;">
+                <div class="bar-fill"></div>
+              </div>
+            </div>
+
+            <div class="mini-row">
+              <div>
+                <div class="mini-label">Anglais écrit</div>
+                <div class="lang-note">C1</div>
+              </div>
+              <div class="bar" style="--level: 0.9;">
+                <div class="bar-fill"></div>
+              </div>
+            </div>
+
+            <div class="mini-row">
+              <div>
+                <div class="mini-label">Anglais oral</div>
+                <div class="lang-note">C1</div>
+              </div>
+              <div class="bar" style="--level: 0.9;">
+                <div class="bar-fill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXPÉRIENCE -->
+      <section class="card">
+        <div class="card-inner">
+          <div class="section-label">Expérience</div>
+          <div class="section-title">
+            Coexya
+            <span>paris</span>
+          </div>
+
+          <div class="timeline">
+            <div class="xp-item">
+              <div class="xp-header">
+                <div class="xp-role">Ingénieur Concepteur &ndash; QA Automation</div>
+                <div class="xp-date">2022 &ndash; Présent</div>
+              </div>
+              <div class="xp-company">Coexya · Paris</div>
+              <ul class="xp-bullets">
+                <li><strong>20+ collaborateurs</strong> accompagnés sur la stratégie QA et l’automatisation.</li>
+                <li><strong>200+ tests composants (UI)</strong> et <strong>10 parcours E2E</strong> critiques automatisés.</li>
+                <li><strong>600+ tests API</strong> dédiés à la robustesse des services.</li>
+                <li>Intégration complète en <strong>CI/CD</strong> via Azure DevOps.</li>
+                <li>Prise en charge de la <strong>sécurité applicative (CxOne)</strong>.</li>
+                <li>Implémentation de l’architecture d’automatisation <strong>from scratch</strong>.</li>
+              </ul>
+            </div>
+
+            <div class="xp-item">
+              <div class="xp-header">
+                <div class="xp-role">Analyste Ingénieur</div>
+                <div class="xp-date">2020 &ndash; 2022</div>
+              </div>
+              <div class="xp-company">Coexya · Paris</div>
+              <ul class="xp-bullets">
+                <li>Analyse des besoins, estimation du workload, revue de code.</li>
+                <li>Responsable de la <strong>sécurité web</strong>.</li>
+              </ul>
+            </div>
+
+            <div class="xp-item">
+              <div class="xp-header">
+                <div class="xp-role">Ingénieur d&apos;études</div>
+                <div class="xp-date">2018 &ndash; 2020</div>
+              </div>
+              <div class="xp-company">Coexya · Paris</div>
+              <ul class="xp-bullets">
+                <li>Développeur <strong>full stack</strong> (.NET, SQL, applications web).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- INTERNATIONAL & FORMATION -->
+      <section class="card">
+        <div class="card-inner">
+          <div class="section-label">International &amp; formation</div>
+          <div class="section-title">
+            Parcours
+            <span>nz &middot; irlande</span>
+          </div>
+
+          <div class="tag-wrapper">
+            <div class="tag-card">
+              <div class="tag-title">IPONZ</div>
+              <div class="tag-sub">Gouvernement de Nouvelle-Zélande &ndash; Website propriété intellectuelle</div>
+              <div class="tag-meta">Projet international &ndash; QA &amp; automatisation</div>
+            </div>
+
+            <div class="tag-card">
+              <div class="tag-title">RESOLVE</div>
+              <div class="tag-sub">Ministère de la Justice &ndash; Nouvelle-Zélande &ndash; Gestion des plaintes</div>
+              <div class="tag-meta">Website métier &ndash; flux critiques</div>
+            </div>
+
+            <div class="tag-card">
+              <div class="tag-title">IPO</div>
+              <div class="tag-sub">Gouvernement d&apos;Irlande &ndash; Website propriété intellectuelle</div>
+              <div class="tag-meta">Qualité et continuité de service</div>
+            </div>
+          </div>
+
+          <div class="section-label" style="margin-top: 14px;">Formation</div>
+          <div class="tag-wrapper">
+            <div class="tag-card">
+              <div class="tag-title">Diplôme d&apos;ingénieur</div>
+              <div class="tag-sub">Institut d&apos;Optique Graduate School</div>
+              <div class="tag-meta">2018</div>
+            </div>
+
+            <div class="tag-card">
+              <div class="tag-title">Master Informatique</div>
+              <div class="tag-sub">Université de Bordeaux</div>
+              <div class="tag-meta">2018</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="card">
+        <div class="card-inner">
+          <div class="section-label">Contact</div>
+          <div class="section-title">
+            Me joindre
+            <span>disponible pour échange</span>
+          </div>
+
+          <div class="contact-row">
+            <a class="contact-item" href="mailto:nicolas.parisse.93@gmail.com">
+              <div class="contact-icon">@</div>
+              <div>
+                <div class="contact-label">Email</div>
+                <div class="contact-value">nicolas.parisse.93@gmail.com</div>
+              </div>
+            </a>
+
+            <a class="contact-item" href="tel:+33685743744">
+              <div class="contact-icon">📞</div>
+              <div>
+                <div class="contact-label">Téléphone</div>
+                <div class="contact-value">06 85 74 37 44</div>
+              </div>
+            </a>
+
+            <a class="contact-item" href="https://www.linkedin.com/in/nicolas-parisse" target="_blank" rel="noopener noreferrer">
+              <div class="contact-icon">in</div>
+              <div>
+                <div class="contact-label">LinkedIn</div>
+                <div class="contact-value">linkedin.com/in/nicolas-parisse</div>
+              </div>
+            </a>
+
+            <a class="contact-item" href="https://www.google.com/maps?q=Paris+12e" target="_blank" rel="noopener noreferrer">
+              <div class="contact-icon">📍</div>
+              <div>
+                <div class="contact-label">Localisation</div>
+                <div class="contact-value">Paris 12e</div>
+              </div>
+            </a>
+          </div>
+
+          <div class="nav-dots">
+            <div class="nav-dot nav-dot--active"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Optionnel : future logique de navigation type "stories" / swipe
+    // Pour l’instant, tout est géré en scroll natif.
+  </script>
+</body>
+</html>
