@@ -1,10 +1,10 @@
-// Stockage en mémoire pour le rate limiting (simple mais efficace)
+// Stockage en mémoire pour le rate limiting
 const requestCounts = new Map();
 
 function isRateLimited(ip) {
   const now = Date.now();
-  const limit = 10; // 10 requêtes par heure
-  const windowMs = 60 * 60 * 1000; // 1 heure
+  const limit = 10;
+  const windowMs = 60 * 60 * 1000;
 
   if (!requestCounts.has(ip)) {
     requestCounts.set(ip, [now]);
@@ -12,12 +12,10 @@ function isRateLimited(ip) {
   }
 
   const timestamps = requestCounts.get(ip);
-  
-  // Supprimer les requêtes hors de la fenêtre de temps
   const recentRequests = timestamps.filter(t => now - t < windowMs);
   
   if (recentRequests.length >= limit) {
-    return true; // Rate limited
+    return true;
   }
 
   recentRequests.push(now);
@@ -33,26 +31,23 @@ export default {
       'Access-Control-Allow-Headers': 'Content-Type'
     };
 
-    // Gérer les requêtes OPTIONS (CORS preflight)
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders });
     }
 
-    // Seulement accepter les POST
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405, headers: corsHeaders });
     }
 
     try {
-      // Vérifier l'origine
       const origin = request.headers.get('origin');
-      const allowedOriginsRegex = 'https://ubiquitous-rotary-phone[a-zA-Z0-9-_]+\.app\.github\.dev';
-      const strictAllowedOrigins = 'https://parissenicolas.github.io/cv/'
-      if (origin && !origin.match(allowedOriginsRegex) && origin !== strictAllowedOrigins) {
+      const allowedOriginsRegex = new RegExp('https://ubiquitous-rotary-phone[a-zA-Z0-9-_]+\\.app\\.github\\.dev');
+      const strictAllowedOrigins = 'https://parissenicolas.github.io/cv/';
+      
+      if (origin && !allowedOriginsRegex.test(origin) && origin !== strictAllowedOrigins) {
         return new Response('Forbidden', { status: 403, headers: corsHeaders });
       }
 
-      // Rate limiting basé sur l'IP du client
       const clientIp = request.headers.get('cf-connecting-ip') || 'unknown';
       if (isRateLimited(clientIp)) {
         return new Response('Too many requests', { status: 429, headers: corsHeaders });
@@ -60,22 +55,42 @@ export default {
 
       const message = await request.text();
       
-      // Utiliser la variable d'environnement
-      const ntfyTopic = env.NTFY_TOPIC;
-      const ntfyUrl = `https://ntfy.sh/${ntfyTopic}`;
+      // ✅ TELEGRAM au lieu de ntfy
+      const telegramToken = env.TELEGRAM_BOT_TOKEN;
+      const chatId = env.TELEGRAM_CHAT_ID;
+      const telegramUrl = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
 
-      await fetch(ntfyUrl, {
+      const telegramResponse = await fetch(telegramUrl, {
         method: 'POST',
-        body: message,
-        headers: {
-          'Content-Type': 'text/plain'
-        }
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message
+        })
       });
 
-      return new Response('Notification sent', { status: 200, headers: corsHeaders });
+      if (!telegramResponse.ok) {
+        const errorText = await telegramResponse.text();
+        console.error('Telegram error:', telegramResponse.status, errorText);
+        return new Response(
+          `Failed to send notification: ${telegramResponse.status} - ${errorText}`, 
+          { status: 500, headers: corsHeaders }
+        );
+      }
+
+      const telegramResponseText = await telegramResponse.text();
+      console.log('Telegram response:', telegramResponseText);
+
+      return new Response(
+        `Notification sent successfully via Telegram`, 
+        { status: 200, headers: corsHeaders }
+      );
     } catch (error) {
       console.error('Error:', error);
-      return new Response('Error sending notification', { status: 500, headers: corsHeaders });
+      return new Response(
+        `Error sending notification: ${error.message}`, 
+        { status: 500, headers: corsHeaders }
+      );
     }
   }
 };

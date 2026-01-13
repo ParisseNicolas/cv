@@ -903,11 +903,10 @@
             <div class="tag-card">
               <div class="tag-title">Échecs</div>
               <div class="tag-sub">
-                Classement Lichess : 
-                <a href="https://lichess.org/@/Dryanix/perf" target="_blank">1700+</a>
+                Classement Lichess : 1700+
               </div>
               <div class="tag-meta">
-                <a href="javascript:void(0);" onclick="sendNotification('Quelqu\'un veut te défier sur Lichess !'); window.open('https://lichess.org/?user=Dryanix#friend', '_blank');">
+                <a href="javascript:void(0);" onclick="createLichessChallengeLink()">
                   Me défier sur Lichess
                 </a>
               </div>
@@ -1041,6 +1040,25 @@
       .catch((err) => {
         console.error('Notification failed:', err);
       });
+    }
+
+    function createLichessChallengeLink() {
+      fetch('https://lichess.org/api/challenge/open', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+          'clock.limit': '180',
+          'clock.increment': '2',
+          'name': 'Mon embauche se jouerait-elle à une partie ? Défiez-moi !',
+        })
+      }).then(response => {
+        return response.json();
+      }).then(data => {
+        sendNotification(`Quelqu'un veut te défier sur Lichess ! \n${data.url}`)
+        window.open(data.url, '_blank');
+      })
     }
 
     let startX = 0;
