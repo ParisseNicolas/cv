@@ -529,6 +529,47 @@
         padding-bottom: 32px;
       }
     }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: black;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      touch-action: none; /* très important pour gérer nos gestes */
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 10000;
+      font-size: 24px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .lightbox-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox-inner img,
+    .lightbox-inner video {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
   </style>
 </head>
 <body>
@@ -816,6 +857,79 @@
         </div>
       </section>
 
+      <!-- HOBBIES -->
+      <section class="card">
+        <div class="card-inner">
+          <div class="section-label">Hobbies</div>
+          <div class="section-title">
+            Centres d’intérêt
+            <span>perso</span>
+          </div>
+
+          <div class="tag-wrapper">
+
+            <!-- Escalade -->
+            <div class="tag-card">
+              <div class="tag-title">Escalade</div>
+              <div class="tag-sub">Bleau, grandes voies, difficulté. Niveau 8a</div>
+
+              <!-- Vidéo escalade -->
+              <video  
+                muted 
+                playsinline 
+                preload="metadata" 
+                onclick="openLightbox(['cv/escalade.mp4'], 0)"
+                style="width:100%; border-radius:14px; margin-top:8px;">
+                <source src="cv/escalade.mp4" type="video/mp4">
+              </video>
+
+              <div class="tag-meta">Vidéo personnelle</div>
+            </div>
+
+            <!-- Échecs -->
+            <div class="tag-card">
+              <div class="tag-title">Échecs</div>
+              <div class="tag-sub">
+                Classement Lichess : 
+                <a href="https://lichess.org/@/Dryanix/perf" target="_blank">1700+</a>
+              </div>
+              <div class="tag-meta">
+                <a href="https://lichess.org/?user=Dryanix#friend" target="_blank">
+                  Me défier sur Lichess
+                </a>
+              </div>
+            </div>
+
+
+            <!-- Road trip -->
+            <div class="tag-card">
+              <div class="tag-title">Voyage</div>
+              <div class="tag-sub">Road trips en Europe</div>
+
+              <div style="display:flex; gap:8px; overflow-x:auto; padding:4px 0;">
+                <img src="cv/roadtrip/vernazza.jpg" 
+                    alt="Vernazza" 
+                    onclick="openLightbox(['cv/roadtrip/vernazza.jpg','cv/roadtrip/Terrasse.jpg','cv/roadtrip/Nicolas et met.jpg'], 0)"
+                    style="height:120px; border-radius:12px; flex-shrink:0;">
+                <img src="cv/roadtrip/Terrasse.jpg" 
+                    alt="Terrasse" 
+                    onclick="openLightbox(['cv/roadtrip/vernazza.jpg','cv/roadtrip/Terrasse.jpg','cv/roadtrip/Nicolas et met.jpg'], 1)"
+                    style="height:120px; border-radius:12px; flex-shrink:0;">
+                <img src="cv/roadtrip/Nicolas et met.jpg" 
+                    alt="Nicolas et met" 
+                    onclick="openLightbox(['cv/roadtrip/vernazza.jpg','cv/roadtrip/Terrasse.jpg','cv/roadtrip/Nicolas et met.jpg'], 2)"
+                    style="height:120px; border-radius:12px; flex-shrink:0;">
+              </div>
+
+              <div class="tag-meta">Italie & Europe</div>
+            </div>
+
+
+          </div>
+        </div>
+      </section>
+
+
       <!-- CONTACT -->
       <section class="card">
         <div class="card-inner">
@@ -869,9 +983,97 @@
     </main>
   </div>
 
+  <div id="lightbox" class="lightbox hidden">
+    <div class="lightbox-close" onclick="closeLightbox()">✕</div>
+    <div class="lightbox-inner" id="lightboxInner">
+      <!-- Le média actif sera injecté ici -->
+    </div>
+  </div>
+
   <script>
-    // Optionnel : future logique de navigation type "stories" / swipe
-    // Pour l’instant, tout est géré en scroll natif.
+    let lightbox = document.getElementById("lightbox");
+    let lightboxInner = document.getElementById("lightboxInner");
+
+    let currentMediaList = [];
+    let currentIndex = 0;
+
+    let startX = 0;
+    let startY = 0;
+    let isDragging = false;
+
+    const SWIPE_THRESHOLD = 60; // pixels
+
+    function renderCurrentMedia() {
+      lightboxInner.innerHTML = "";
+      const src = currentMediaList[currentIndex];
+
+      if (src.endsWith(".mp4")) {
+        const video = document.createElement("video");
+        video.src = src;
+        video.controls = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.autoplay = true;
+        lightboxInner.appendChild(video);
+      } else {
+        const img = document.createElement("img");
+        img.src = src;
+        lightboxInner.appendChild(img);
+      }
+    }
+
+    function openLightbox(mediaList, index = 0) {
+      currentMediaList = mediaList;
+      currentIndex = index;
+
+      renderCurrentMedia();
+      lightbox.classList.remove("hidden");
+    }
+
+    function closeLightbox() {
+      lightbox.classList.add("hidden");
+      lightboxInner.innerHTML = "";
+    }
+
+    // Gestes tactiles : gauche/droite = suivant/précédent, bas = fermer
+    lightbox.addEventListener("touchstart", function (e) {
+      const touch = e.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+      isDragging = true;
+    }, { passive: true });
+
+    lightbox.addEventListener("touchmove", function (e) {
+      // on ne bouge pas le média en live ici, on décide juste à la fin
+    }, { passive: true });
+
+    lightbox.addEventListener("touchend", function (e) {
+      if (!isDragging) return;
+      isDragging = false;
+
+      const touch = e.changedTouches[0];
+      const dx = touch.clientX - startX;
+      const dy = touch.clientY - startY;
+
+      if (Math.abs(dx) > Math.abs(dy)) {
+        // swipe horizontal -> slider
+        if (dx < -SWIPE_THRESHOLD && currentIndex < currentMediaList.length - 1) {
+          // vers la gauche -> suivant
+          currentIndex++;
+          renderCurrentMedia();
+        } else if (dx > SWIPE_THRESHOLD && currentIndex > 0) {
+          // vers la droite -> précédent
+          currentIndex--;
+          renderCurrentMedia();
+        }
+      } else {
+        // swipe vertical -> fermer si on va vers le bas
+        if (dy > SWIPE_THRESHOLD) {
+          closeLightbox();
+        }
+      }
+    }, { passive: true });
   </script>
+
 </body>
 </html>
