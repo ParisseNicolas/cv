@@ -559,7 +559,7 @@
       width: 100%;
       height: 100%;
       display: flex;
-      overflow-x: hidden;
+      overflow: hidden;
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
       padding: 0 8px;
@@ -1107,11 +1107,6 @@
           currentIndex++;
         } else if (dx > SWIPE_THRESHOLD && currentIndex > 0) {
           currentIndex--;
-        }
-      } else {
-        if (dy > SWIPE_THRESHOLD) {
-          closeLightbox();
-          return;
         }
       }
       
