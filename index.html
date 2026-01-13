@@ -559,12 +559,25 @@
       width: 100%;
       height: 100%;
       display: flex;
-      justify-content: center;
-      align-items: center;
+      overflow-x: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      padding: 0 8px;
     }
 
-    .lightbox-inner img,
-    .lightbox-inner video {
+    .lightbox-slide {
+      width: 100%;
+      height: 100%;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 8px;
+      scroll-snap-align: center;
+    }
+
+    .lightbox-slide img,
+    .lightbox-slide video {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
@@ -871,7 +884,7 @@
             <!-- Escalade -->
             <div class="tag-card">
               <div class="tag-title">Escalade</div>
-              <div class="tag-sub">Bleau, grandes voies, difficulté. Niveau 8a</div>
+              <div class="tag-sub">Bleau, grandes voies, difficulté. Objectif 8a !</div>
 
               <!-- Vidéo escalade -->
               <video  
@@ -904,7 +917,7 @@
             <!-- Road trip -->
             <div class="tag-card">
               <div class="tag-title">Voyage</div>
-              <div class="tag-sub">Road trips en Europe</div>
+              <div class="tag-sub">Europe</div>
 
               <div style="display:flex; gap:8px; overflow-x:auto; padding:4px 0;">
                 <img src="cv/roadtrip/vernazza.jpg" 
@@ -919,9 +932,17 @@
                     alt="Nicolas et met" 
                     onclick="openLightbox(['cv/roadtrip/vernazza.jpg','cv/roadtrip/Terrasse.jpg','cv/roadtrip/Nicolas et met.jpg'], 2)"
                     style="height:120px; border-radius:12px; flex-shrink:0;">
+                <img src="cv/roadtrip/porto.jpg" 
+                    alt="Terrasse" 
+                    onclick="openLightbox(['cv/roadtrip/vernazza.jpg','cv/roadtrip/Terrasse.jpg','cv/roadtrip/Nicolas et met.jpg', 'cv/roadtrip/porto.jpg'], 3)"
+                    style="height:120px; border-radius:12px; flex-shrink:0;">
+                <img src="cv/roadtrip/grandeVoie.jpg" 
+                    alt="Terrasse" 
+                    onclick="openLightbox(['cv/roadtrip/vernazza.jpg','cv/roadtrip/Terrasse.jpg','cv/roadtrip/Nicolas et met.jpg', 'cv/roadtrip/grandeVoie.jpg'], 4)"
+                    style="height:120px; border-radius:12px; flex-shrink:0;">
               </div>
 
-              <div class="tag-meta">Italie & Europe</div>
+              <div class="tag-meta">Europe</div>
             </div>
 
 
@@ -1003,30 +1024,50 @@
 
     const SWIPE_THRESHOLD = 60; // pixels
 
-    function renderCurrentMedia() {
+    function renderAllMedia() {
       lightboxInner.innerHTML = "";
-      const src = currentMediaList[currentIndex];
+      currentMediaList.forEach((src, index) => {
+        const slide = document.createElement("div");
+        slide.className = "lightbox-slide";
 
-      if (src.endsWith(".mp4")) {
-        const video = document.createElement("video");
-        video.src = src;
-        video.controls = true;
-        video.muted = true;
-        video.playsInline = true;
-        video.autoplay = true;
-        lightboxInner.appendChild(video);
-      } else {
-        const img = document.createElement("img");
-        img.src = src;
-        lightboxInner.appendChild(img);
-      }
+        if (src.endsWith(".mp4")) {
+          const video = document.createElement("video");
+          video.src = src;
+          video.controls = true;
+          video.muted = true;
+          video.playsInline = true;
+          video.autoplay = index === currentIndex;
+          slide.appendChild(video);
+        } else {
+          const img = document.createElement("img");
+          img.src = src;
+          slide.appendChild(img);
+        }
+        lightboxInner.appendChild(slide);
+      });
+      updateSliderPosition();
+      
+      // Lancer la vidéo du slide courant après un court délai
+      setTimeout(() => {
+        const currentSlide = lightboxInner.children[currentIndex];
+        const video = currentSlide.querySelector('video');
+        if (video) {
+          video.play().catch(() => {
+            // L'autoplay a peut-être échoué, c'est ok
+          });
+        }
+      }, 100);
+    }
+
+    function updateSliderPosition() {
+      const slide = lightboxInner.children[currentIndex];
+      slide.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
 
     function openLightbox(mediaList, index = 0) {
       currentMediaList = mediaList;
       currentIndex = index;
-
-      renderCurrentMedia();
+      renderAllMedia();
       lightbox.classList.remove("hidden");
     }
 
@@ -1044,7 +1085,13 @@
     }, { passive: true });
 
     lightbox.addEventListener("touchmove", function (e) {
-      // on ne bouge pas le média en live ici, on décide juste à la fin
+      if (!isDragging) return;
+      const touch = e.touches[0];
+      const dx = touch.clientX - startX;
+      
+      const slideWidth = lightboxInner.offsetWidth;
+      const scrollPos = (currentIndex * slideWidth) - dx;
+      lightboxInner.scrollLeft = scrollPos;
     }, { passive: true });
 
     lightbox.addEventListener("touchend", function (e) {
@@ -1056,22 +1103,19 @@
       const dy = touch.clientY - startY;
 
       if (Math.abs(dx) > Math.abs(dy)) {
-        // swipe horizontal -> slider
         if (dx < -SWIPE_THRESHOLD && currentIndex < currentMediaList.length - 1) {
-          // vers la gauche -> suivant
           currentIndex++;
-          renderCurrentMedia();
         } else if (dx > SWIPE_THRESHOLD && currentIndex > 0) {
-          // vers la droite -> précédent
           currentIndex--;
-          renderCurrentMedia();
         }
       } else {
-        // swipe vertical -> fermer si on va vers le bas
         if (dy > SWIPE_THRESHOLD) {
           closeLightbox();
+          return;
         }
       }
+      
+      updateSliderPosition();
     }, { passive: true });
   </script>
 
