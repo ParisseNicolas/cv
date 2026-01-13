@@ -583,6 +583,28 @@
       object-fit: contain;
     }
 
+    .chess-card {
+      background-image: url('./cv/images/chess-board.jpg');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .chess-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.9);
+      z-index: 0;
+    }
+
+    .chess-card > * {
+      position: relative;
+      z-index: 1;
+    }
   </style>
 </head>
 <body>
@@ -900,7 +922,7 @@
             </div>
 
             <!-- Échecs -->
-            <div class="tag-card">
+            <div class="tag-card chess-card">
               <div class="tag-title">Échecs</div>
               <div class="tag-sub">
                 Classement Lichess : 1700+
