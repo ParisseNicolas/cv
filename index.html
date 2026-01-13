@@ -892,11 +892,11 @@
                 playsinline 
                 preload="metadata" 
                 onclick="openLightbox(['cv/escalade.mp4'], 0)"
-                style="width:100%; border-radius:14px; margin-top:8px;">
+                style="width:50%; aspect-ratio: 1; display: block; margin: 8px auto 0; border-radius:14px; object-fit: cover;">
                 <source src="cv/escalade.mp4" type="video/mp4">
               </video>
 
-              <div class="tag-meta">Vidéo personnelle</div>
+              <div class="tag-meta" style="text-align: center;">Crotale 7a - Fontainebleau</div>
             </div>
 
             <!-- Échecs -->
@@ -907,7 +907,7 @@
                 <a href="https://lichess.org/@/Dryanix/perf" target="_blank">1700+</a>
               </div>
               <div class="tag-meta">
-                <a href="https://lichess.org/?user=Dryanix#friend" target="_blank">
+                <a href="javascript:void(0);" onclick="sendNotification('Quelqu\'un veut te défier sur Lichess !'); window.open('https://lichess.org/?user=Dryanix#friend', '_blank');">
                   Me défier sur Lichess
                 </a>
               </div>
@@ -1017,6 +1017,21 @@
 
     let currentMediaList = [];
     let currentIndex = 0;
+
+    function sendNotification(message) {
+      const ntfyTopic = "nicolas-cv-challenge-voicing-frenzy-pedicure-finally-unvocal";
+      const ntfyUrl = `https://ntfy.sh/${ntfyTopic}`;
+      
+      fetch(ntfyUrl, {
+        method: "POST",
+        body: message,
+        headers: {
+          "Content-Type": "text/plain"
+        }
+      }).catch(() => {
+        // Silencieusement ignoré si Ntfy.sh n'est pas accessible
+      });
+    }
 
     let startX = 0;
     let startY = 0;
