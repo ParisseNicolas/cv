@@ -1019,17 +1019,27 @@
     let currentIndex = 0;
 
     function sendNotification(message) {
-      const ntfyTopic = "nicolas-cv-challenge-voicing-frenzy-pedicure-finally-unvocal";
-      const ntfyUrl = `https://ntfy.sh/${ntfyTopic}`;
+      const workerUrl = "https://cv-notification-worker.nicolas-parisse-93.workers.dev";
       
-      fetch(ntfyUrl, {
+      console.log('Sending notification to:', workerUrl);
+      console.log('Message:', message);
+      
+      fetch(workerUrl, {
         method: "POST",
         body: message,
         headers: {
           "Content-Type": "text/plain"
         }
-      }).catch(() => {
-        // Silencieusement ignoré si Ntfy.sh n'est pas accessible
+      })
+      .then(response => {
+        console.log('Response status:', response.status);
+        return response.text();
+      })
+      .then(data => {
+        console.log('Response data:', data);
+      })
+      .catch((err) => {
+        console.error('Notification failed:', err);
       });
     }
 
