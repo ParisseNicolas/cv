@@ -38,7 +38,6 @@ async function trackVisitor() {
       const ipData = await ipResponse.json();
       visitorInfo.ip = ipData.ip;
     } catch (ipError) {
-      console.log('IP data unavailable');
     }
 
     // Formater le message pour Telegram

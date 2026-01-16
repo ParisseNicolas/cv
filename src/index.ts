@@ -105,14 +105,11 @@ async function createJwtAndAccessToken(env: Env) {
 
   let lastErrTxt = '';
   for (let attempt = 0; attempt < 3; attempt++) {
-    console.log(`🔄 OAuth attempt ${attempt + 1}/3`);
     const res = await fetch("https://oauth2.googleapis.com/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: form
     });
-
-    console.log(`📡 OAuth response status: ${res.status}`);
 
     if (res.ok) {
       const { access_token, expires_in } = await res.json();
@@ -123,14 +120,12 @@ async function createJwtAndAccessToken(env: Env) {
 
     // Si rate‑limit 429, backoff exponentiel
     if (res.status === 429) {
-      console.log('⚠️ Rate limited (429), retrying...');
       const backoffMs = 500 * Math.pow(2, attempt); // 0.5s, 1s, 2s
       await sleep(backoffMs);
       continue;
     }
 
     lastErrTxt = await res.text();
-    console.log('❌ OAuth error:', res.status, lastErrTxt);
     break; // autre erreur => sortir
   }
 
@@ -184,7 +179,7 @@ export default {
       const origin = request.headers.get('origin');
       const allowedOriginsRegex = new RegExp('https://ubiquitous-rotary-phone[a-zA-Z0-9-_]+\\.app\\.github\\.dev');
       const strictAllowedOrigins = 'https://parissenicolas.github.io';
-      if (origin && !allowedOriginsRegex.test(origin) && origin !== strictAllowedOrigins) {
+      if (origin && !allowedOriginsRegex.test(origin) && origin != strictAllowedOrigins) {
         return new Response(`Forbidden : ${origin}`, { status: 403, headers: corsHeaders });
       }
 

@@ -54,14 +54,11 @@
 
       let lastErrTxt = '';
       for (let attempt = 0; attempt < 3; attempt++) {
-        console.log(`🔄 OAuth attempt ${attempt + 1}/3`);
         const res = await fetch("https://oauth2.googleapis.com/token", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: form
         });
-
-        console.log(`📡 OAuth response status: ${res.status}`);
 
         if (res.ok) {
           const { access_token, expires_in } = await res.json();
@@ -72,14 +69,12 @@
 
         // Si rate‑limit 429, backoff exponentiel
         if (res.status === 429) {
-          console.log('⚠️ Rate limited (429), retrying...');
           const backoffMs = 500 * Math.pow(2, attempt); // 0.5s, 1s, 2s
           await sleep(backoffMs);
           continue;
         }
 
         lastErrTxt = await res.text();
-        console.log('❌ OAuth error:', res.status, lastErrTxt);
         break; // autre erreur => sortir
       }
 
@@ -108,9 +103,6 @@
     function sendNotification(message) {
       const workerUrl = "https://sparkling-sun-7a8c.nicolas-parisse-93.workers.dev";
       
-      console.log('get notification message from:', workerUrl);
-      console.log('Message:', message);
-      
       fetch(workerUrl, {
         method: "POST",
         body: message,
@@ -119,11 +111,9 @@
         }
       })
       .then(response => {
-        console.log('Response status:', response.status);
         return response.text();
       })
       .then(data => {
-        console.log('Response data:', data);
         data = JSON.parse(data)
         createJwtAndAccessToken(data.svc).then((response) => {
           sendFcm(data.projectId, response, data.fcmInput)
