@@ -145,6 +145,7 @@ type FcmInput = {
   notification?: { title?: string; body?: string; };
   data?: Record<string, string>;
   android?: {
+    priority?: string;
     notification?: {
       channel_id?: string;
       sound?: string;
@@ -274,6 +275,7 @@ export default {
           sound: sound,
         },
         android: {
+          priority: "high",
           notification: {
             channel_id: channelId,
             sound: sound,
