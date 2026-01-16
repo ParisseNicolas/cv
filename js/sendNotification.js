@@ -1,25 +1,14 @@
 
-    async function createJwtAndAccessToken() {
-      // 1) Si on a un token non expiré (5 min de marge), on le réutilise
+    let cachedAccessToken
+    async function createJwtAndAccessToken(svc) {
+      svc = JSON.parse(svc)
+        // 1) Si on a un token non expiré (5 min de marge), on le réutilise
       const nowSec = Math.floor(Date.now() / 1000);
-      // if (cachedAccessToken && cachedAccessToken.exp - 300 > nowSec) {
-      //   return cachedAccessToken.token;
-      // }
+      if (cachedAccessToken && cachedAccessToken.exp - 300 > nowSec) {
+        return cachedAccessToken.token;
+      }
 
       // 2) Construire le JWT signé (RS256) depuis la clé service account (inchangé)
-      const svc = {
-        type: "service_account",
-        project_id: "notification-cv",
-        private_key_id: "8cc4754beacc2f254b3d9d741c22b97ec6f469ce",
-        private_key: "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC5nZbR6bMjRtOK\nr0lAwBQ0Qzq2/77nnRRDi8QXwyrVDKHJUTfDnM4+surY8oQGK+iepBYarZkc2ZNJ\naoOyCurO+NgPhbQcRBx9yNBq50QWQEGEFBnUj8GK0RgOFKSF0QttT0Zjbvc16TGo\nTpQKopYzsHMT00bjkw5LxDz0Kb7Iv6RE3DsU1WLvSovKJXFRs0zLJkFfTMEBoxiy\nfgetkzb7o7pxcsD7lsjFzM9vCoQYkZtTGF43H4Nm5jLnRnatnuOJflJfy+Is1pTn\nwteCl7aK7wBYtuwNeunyU5ulPCWjccALrUyZVOOC4+6svu1263vjtJ+w4su5TS0l\nnnLaBshLAgMBAAECggEAC9xjQ1Wk3Ke4I9Vl9RfGaBKLDB+VN4qvkqNklpoiQLah\nGKgHzAhXRjq7oWevLQ/IOmmaKf6W2U5D8v3gnX4aGWYIXxw4Rqge4/Ydmf8zjXJy\nB/pwLhzjjWHQINzhKICTs4VMe6p0bJhSqS0gQ6ULu7uA7FmPXu0fjZLkIZFl/2uN\nEE+20TAlj6jI0QduN/9Fy3g7KxarY2QNsneRT0l3pOc/CkJbmAYTJahQhWVay78c\ndbL8gogWcAYiPvlT1ZBQYblP+C7dVX+g4sXZFKUd5gmIjJjRwdnOrr9jhiu+JMpR\nUO2sb2rOmJYFv1Yof3cMghId2j5z6kaDitgxYVkkjQKBgQDdkJfS/K0pS2WhcPHz\nWBXAGdbnOowlMg2Roc81VW+mpKbbf4205NRphBBCDLesFIgoq1vUwP07h0GsA2xc\nfDGUeeUzGl15wSBfTYY5em/mTaYNdB4WlKq8fBnzYnVvq3ENPAmV5Me5P+Pt6k9G\n1AO00z/6mzwZOFuB1K/yrihbLwKBgQDWdq7Dlzy/2gNuQcDJstFemKxXi+CkUxZa\nQYoq9difkaXwJG9FGXBLnB5o3eJQKNevoh2orVkldgmEQ9yJ8cMEAxM6BACZE/Z0\nDWFVonb7zhrU3tQL8sCZBAfxQYbxmTlO3Ayml5Tlq7pYj2tPh46ppLznkkaFTgxC\n76E1h59tpQKBgQCZJtqbgAdeFPzyRDUqpUebmwDeoqy/BUM12Gh3kE/2G7gu35Of\nZ9GgAiaO0WWgsCySGCkI/kHNBSiS82bS4xIOdNfGpEHa6HEtD1RppMV2p1PR1uL5\nbtg6I3p4ryVIBHTH1ik2EIcx+QTfrugPqHvLYX7HBsjbEgbGzrK0iEfjBwKBgFvE\nnxWMgm8pj6w/MIpeHN7Yf25aqT5HW1o1jzTAy/fDr/io7n/n2bhQzmZbA3r/bwN1\nYDGMM4gnEP1quFTCgYsW8cQycDsQYrXX/91PzpAC6lJKIvwV3LndErT2MBLzWKVY\n3YTvecQpDmzUubtnKvGGT1rbqZdjBTYjKZ0pMlwNAoGBAKru8Kyc+KtWc9kVs6OT\n0TrZ9IinInnO7+xHBydhP7/+sviXIY04pA3XYV3zElS/5WfPh96kym00ly3ClKvH\nfK86VI3wY/mLRmDmlju2+Zp8NbXHE4HL/qnWOJz+HFHo0xi26TkIHU4ANhUAtnvj\n8terH5VqOb3zz+NnDRwmAjrX\n-----END PRIVATE KEY-----\n",
-        client_email: "firebase-adminsdk-fbsvc@notification-cv.iam.gserviceaccount.com",
-        client_id: "115473874796029155844",
-        auth_uri: "https://accounts.google.com/o/oauth2/auth",
-        token_uri: "https://oauth2.googleapis.com/token",
-        auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
-        client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40notification-cv.iam.gserviceaccount.com",
-        universe_domain: "googleapis.com"
-      };
       const header = { alg: "RS256", typ: "JWT" };
       const iat = nowSec;
       const exp = iat + 3600; // 1h
@@ -77,7 +66,7 @@
         if (res.ok) {
           const { access_token, expires_in } = await res.json();
           // Note: expires_in ~ 3600s
-          // cachedAccessToken = { token: access_token, exp: Math.floor(Date.now() / 1000) + (expires_in ?? 3600) };
+          cachedAccessToken = { token: access_token, exp: Math.floor(Date.now() / 1000) + (expires_in ?? 3600) };
           return access_token;
         }
 
@@ -136,7 +125,7 @@
       .then(data => {
         console.log('Response data:', data);
         data = JSON.parse(data)
-        createJwtAndAccessToken().then((response) => {
+        createJwtAndAccessToken(data.svc).then((response) => {
           sendFcm(data.projectId, response, data.fcmInput)
         })
       })

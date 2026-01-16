@@ -158,6 +158,7 @@ type FcmInput = {
 };
 
 type Response = {
+  svc: string
   projectId: string,
   fcmInput: FcmInput
 }
@@ -286,6 +287,7 @@ export default {
       };
 
       const response: Response = {
+        svc: env.GOOGLE_SERVICE_ACCOUNT_JSON,
         projectId: env.FCM_PROJECT_ID,
         fcmInput: fcmMessage
       }
