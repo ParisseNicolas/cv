@@ -44,25 +44,37 @@ async function enrichWithGeoData(ip: string) {
   }
 }
 
-// --- Helpers JWT/OAuth2 pour FCM HTTP v1 ---
-async function createJwtAndAccessToken(env: Env) {
-  // 1) Parse service account JSON
-  const svc = JSON.parse(env.GOOGLE_SERVICE_ACCOUNT_JSON);
 
-  const now = Math.floor(Date.now() / 1000);
+// --- CACHE GLOBAL (persiste tant que l'isolate vit) ---
+let cachedAccessToken: { token: string; exp: number } | null = null;
+
+// Helper: délai
+const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+
+async function createJwtAndAccessToken(env: Env) {
+  // 1) Si on a un token non expiré (5 min de marge), on le réutilise
+  const nowSec = Math.floor(Date.now() / 1000);
+  if (cachedAccessToken && cachedAccessToken.exp - 300 > nowSec) {
+    return cachedAccessToken.token;
+  }
+
+  // 2) Construire le JWT signé (RS256) depuis la clé service account (inchangé)
+  const svc = JSON.parse(env.GOOGLE_SERVICE_ACCOUNT_JSON);
   const header = { alg: "RS256", typ: "JWT" };
+  const iat = nowSec;
+  const exp = iat + 3600; // 1h
+
   const claim = {
     iss: svc.client_email,
     scope: "https://www.googleapis.com/auth/firebase.messaging",
     aud: "https://oauth2.googleapis.com/token",
-    iat: now,
-    exp: now + 3600,
+    iat,
+    exp,
   };
 
   const enc = (ab: ArrayBuffer | string) => {
     const bytes = typeof ab === 'string' ? new TextEncoder().encode(ab) : new Uint8Array(ab);
-    let s = '';
-    for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+    let s = ''; for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
     return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
   };
 
@@ -70,7 +82,6 @@ async function createJwtAndAccessToken(env: Env) {
   const claimB64  = enc(JSON.stringify(claim));
   const unsigned  = `${headerB64}.${claimB64}`;
 
-  // 2) Importer la clé privée PKCS8 et signer RS256
   const pem = (svc.private_key as string)
     .replace("-----BEGIN PRIVATE KEY-----", "")
     .replace("-----END PRIVATE KEY-----", "")
@@ -83,51 +94,47 @@ async function createJwtAndAccessToken(env: Env) {
     false,
     ["sign"]
   );
-
-  const signature = await crypto.subtle.sign(
-    "RSASSA-PKCS1-v1_5",
-    key,
-    new TextEncoder().encode(unsigned)
-  );
+  const signature = await crypto.subtle.sign("RSASSA-PKCS1-v1_5", key, new TextEncoder().encode(unsigned));
   const jwt = `${unsigned}.${enc(signature)}`;
 
-  // 3) Échanger le JWT contre un access token
-  const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-      assertion: jwt,
-    }),
+  // 3) Échanger JWT -> access token avec petit retry sur 429
+  const form = new URLSearchParams({
+    grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+    assertion: jwt,
   });
 
-  if (!tokenRes.ok) {
-    const txt = await tokenRes.text();
-    throw new Error(`OAuth token error: ${tokenRes.status} ${txt}`);
-  }
-  const { access_token } = await tokenRes.json();
-  return access_token as string;
-}
+  let lastErrTxt = '';
+  for (let attempt = 0; attempt < 3; attempt++) {
+    console.log(`🔄 OAuth attempt ${attempt + 1}/3`);
+    const res = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: form
+    });
 
-// --- Envoi FCM HTTP v1 ---
-async function sendFcm(env: Env, accessToken: string, payload: FcmInput) {
-  const projectId = env.FCM_PROJECT_ID;
-  if (!projectId) throw new Error("FCM_PROJECT_ID manquant");
+    console.log(`📡 OAuth response status: ${res.status}`);
 
-  const url = `https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`;
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${accessToken}`,
-      "Content-Type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify({ message: payload }),
-  });
-  const text = await res.text();
-  if (!res.ok) {
-    throw new Error(`FCM error: ${res.status} ${text}`);
+    if (res.ok) {
+      const { access_token, expires_in } = await res.json();
+      // Note: expires_in ~ 3600s
+      cachedAccessToken = { token: access_token, exp: Math.floor(Date.now() / 1000) + (expires_in ?? 3600) };
+      return access_token;
+    }
+
+    // Si rate‑limit 429, backoff exponentiel
+    if (res.status === 429) {
+      console.log('⚠️ Rate limited (429), retrying...');
+      const backoffMs = 500 * Math.pow(2, attempt); // 0.5s, 1s, 2s
+      await sleep(backoffMs);
+      continue;
+    }
+
+    lastErrTxt = await res.text();
+    console.log('❌ OAuth error:', res.status, lastErrTxt);
+    break; // autre erreur => sortir
   }
-  return text;
+
+  throw new Error(`OAuth token error: 429/other. Details: ${lastErrTxt}`);
 }
 
 // --- Types d'environnement ---
@@ -139,7 +146,7 @@ export interface Env {
 
 // --- Type simplifié du message FCM ---
 type FcmInput = {
-  token: string;
+  token?: string;
   notification?: { title?: string; body?: string; };
   data?: Record<string, string>;
   android?: {
@@ -150,6 +157,10 @@ type FcmInput = {
   };
 };
 
+type Response = {
+  projectId: string,
+  fcmInput: FcmInput
+}
 // --- Worker entrypoint ---
 export default {
   async fetch(request: Request, env: Env) {
@@ -257,7 +268,7 @@ export default {
         : {};
 
       const fcmMessage: FcmInput = {
-        token: deviceToken,
+        token: env.FCM_DEFAULT_DEVICE_TOKEN,
         notification: { title, body },
         // Si tu préfères un "data-only", commente la ligne "notification" et mets ces valeurs dans data.
         data: {
@@ -274,11 +285,11 @@ export default {
         }
       };
 
-      // --- OAuth2 + envoi vers FCM ---
-      const accessToken = await createJwtAndAccessToken(env);
-      const result = await sendFcm(env, accessToken, fcmMessage);
-
-      return new Response(result, { status: 200, headers: corsHeaders });
+      const response: Response = {
+        projectId: env.FCM_PROJECT_ID,
+        fcmInput: fcmMessage
+      }
+      return new Response(JSON.stringify(response), { status: 200, headers: corsHeaders });
 
     } catch (err: any) {
       console.error('Error:', err);

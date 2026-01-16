@@ -1,5 +1,3 @@
-// Ajouter ce script dans votre page HTML, juste avant </body>
-
 async function trackVisitor() {
   try {
     // Récupérer les informations du visiteur
@@ -45,16 +43,7 @@ async function trackVisitor() {
 
     // Formater le message pour Telegram
     const message = formatTelegramMessage(visitorInfo);
-
-    // Envoyer au worker Cloudflare
-    await fetch('https://cv-notification-worker.nicolas-parisse-93.workers.dev/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain'
-      },
-      body: message
-    });
-
+    sendNotification(message);
   } catch (error) {
     console.error('Tracking error:', error);
     // Ne pas bloquer le chargement de la page en cas d'erreur

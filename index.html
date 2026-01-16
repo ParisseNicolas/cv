@@ -1039,50 +1039,6 @@
     let currentMediaList = [];
     let currentIndex = 0;
 
-    function sendNotification(message) {
-      const workerUrl = "https://cv-notification-worker.nicolas-parisse-93.workers.dev";
-      
-      console.log('Sending notification to:', workerUrl);
-      console.log('Message:', message);
-      
-      fetch(workerUrl, {
-        method: "POST",
-        body: message,
-        headers: {
-          "Content-Type": "text/plain"
-        }
-      })
-      .then(response => {
-        console.log('Response status:', response.status);
-        return response.text();
-      })
-      .then(data => {
-        console.log('Response data:', data);
-      })
-      .catch((err) => {
-        console.error('Notification failed:', err);
-      });
-    }
-
-    function createLichessChallengeLink() {
-      fetch('https://lichess.org/api/challenge/open', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-          'clock.limit': '180',
-          'clock.increment': '2',
-          'name': 'Mon embauche se jouerait-elle à une partie ? Défiez-moi !',
-        })
-      }).then(response => {
-        return response.json();
-      }).then(data => {
-        sendNotification(`Quelqu'un veut te défier sur Lichess ! \n${data.url}`)
-        window.open(data.url, '_blank');
-      })
-    }
-
     let startX = 0;
     let startY = 0;
     let isDragging = false;
@@ -1178,6 +1134,9 @@
       updateSliderPosition();
     }, { passive: true });
   </script>
+  <script src="./js/sendNotification.js"></script>
+  <script src="./js/challenge.js"></script>
   <script src="./js/visitor-tracking.js"></script>
+  <script></script>
 </body>
 </html>

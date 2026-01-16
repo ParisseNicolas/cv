@@ -1,1 +1,4 @@
 node_modules
+googleServices
+*.tar.gz
+google-cloud-sdk
