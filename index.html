@@ -605,6 +605,181 @@
       position: relative;
       z-index: 1;
     }
+
+    
+
+
+
+/* ---------------------------------------------------------
+   FIX CRITIQUE : permettre la vraie grille 2 colonnes
+---------------------------------------------------------*/
+@media (min-width: 1024px) {
+
+  /* L'app devient une grille 2 colonnes */
+  .app {
+    max-width: 1250px;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 38px;
+    padding: 40px;
+    align-items: start;
+  }
+
+  /* Le feed ne doit PLUS forcer 1 colonne */
+  .feed {
+    display: contents; /* clé de la réussite */
+  }
+  /*
+   display: contents = les enfants du .feed deviennent enfants directs de la grille .app
+   => Permet à sidebar-card et main-card d'aller dans les bonnes colonnes
+  */
+
+  /* Header mobile caché sur desktop */
+  header.app-header {
+    display: none;
+  }
+
+  /* Assignation colonne gauche/droite */
+  .sidebar-card {
+    grid-column: 1;
+  }
+  .main-card {
+    grid-column: 2;
+  }
+
+  /* Hero sticky */
+  .card--hero.sidebar-card {
+    position: sticky;
+    top: 30px;
+    z-index: 10;
+  }
+}
+
+
+
+
+
+
+
+
+/* ==== Download Section (mobile-first) ==== */
+
+.download-card {
+  padding: 20px;
+  text-align: center;
+}
+
+.download-message {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 16px;
+}
+
+.download-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+/* Miniature PDF */
+.pdf-thumb {
+  width: 100%;
+  max-width: 260px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+  display: block;
+  margin: 0 auto;
+}
+
+/* QR + bouton */
+.dl-right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.qr-img {
+  width: 130px;
+  height: 130px;
+}
+
+.qr-caption {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+/* Bouton */
+.download-button {
+  display: inline-block;
+  background: var(--primary);
+  color: #fff !important;
+  padding: 12px 18px;
+  font-size: 14px;
+  border-radius: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+
+/* ----- Toast (confirmation de téléchargement sur mobile & desktop) ----- */
+#dl-toast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 18px;
+  background: #0f172a;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.18);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease;
+}
+#dl-toast.show {
+  opacity: 1;
+}
+
+
+/* ==== Desktop (≥1024px) : 2 colonnes ==== */
+@media (min-width: 1024px) {
+
+  .download-card {
+    grid-column: 2; /* dans la colonne droite */
+    text-align: left;
+  }
+
+  .download-layout {
+    grid-template-columns: 1fr auto; /* miniature à gauche, QR+btn à droite */
+    gap: 24px;
+  }
+
+  .dl-right {
+    align-items: flex-start; /* mettre QR et bouton à gauche, sinon centrés */
+  }
+
+  .pdf-thumb {
+    max-width: 320px;
+  }
+
+  .qr-img {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+
+
+
+
+
+
+
   </style>
 </head>
 <body>
@@ -616,7 +791,7 @@
 
     <main class="feed">
       <!-- HERO / PROFIL -->
-      <section class="card card--hero">
+      <section class="card card--hero sidebar-card">
         <div class="card-inner">
           <div class="hero-header">
             <div class="avatar">
@@ -649,7 +824,7 @@
       </section>
 
       <!-- COMPÉTENCES -->
-      <section class="card">
+      <section class="card main-card">
         <div class="card-inner">
           <div class="section-label">Compétences clés</div>
           <div class="section-title">
@@ -744,7 +919,7 @@
       </section>
 
       <!-- LANGUES -->
-      <section class="card">
+      <section class="card sidebar-card">
         <div class="card-inner">
           <div class="section-label">Langues</div>
           <div class="section-title">
@@ -787,7 +962,7 @@
       </section>
 
       <!-- EXPÉRIENCE -->
-      <section class="card">
+      <section class="card main-card">
         <div class="card-inner">
           <div class="section-label">Expérience</div>
           <div class="section-title">
@@ -842,7 +1017,7 @@
       </section>
 
       <!-- INTERNATIONAL & FORMATION -->
-      <section class="card">
+      <section class="card main-card">
         <div class="card-inner">
           <div class="section-label">International &amp; formation</div>
           <div class="section-title">
@@ -852,7 +1027,7 @@
 
           <div class="tag-wrapper">
             <div class="tag-card">
-              <div class="tag-title"><span class="blurred">OPTONUM</span></div>
+              <div class="tag-title"><span class="blurred">welltried</span></div>
               <div class="tag-sub">Projet SaaS avec technos récentes from scratch &ndash; Automatisation des tests</div>
               <div class="tag-meta">En développement</div>
             </div>
@@ -893,7 +1068,7 @@
       </section>
 
       <!-- HOBBIES -->
-      <section class="card">
+      <section class="card main-card">
         <div class="card-inner">
           <div class="section-label">Hobbies</div>
           <div class="section-title">
@@ -973,7 +1148,7 @@
 
 
       <!-- CONTACT -->
-      <section class="card">
+      <section class="card sidebar-card">
         <div class="card-inner">
           <div class="section-label">Contact</div>
           <div class="section-title">
@@ -1022,6 +1197,44 @@
           </div> -->
         </div>
       </section>
+
+       
+
+
+<section class="card main-card download-card">
+  <div class="card-inner">
+
+    <div class="section-label">Téléchargement</div>
+    <div class="section-title">
+            Version classique
+            <span>PDF</span>
+          </div>
+    <div class="download-layout">
+
+      <!-- Gauche : miniature du PDF -->
+      <div class="dl-left">
+        <img src="cv/images/preview.png" 
+             alt="Aperçu du CV PDF" 
+             class="pdf-thumb"/>
+      </div>
+
+      <!-- Droite : QR + bouton -->
+      <div class="dl-right">
+        <a href="cv/CV_Nicolas_Parisse.pdf"
+           download
+           class="download-button">
+          📄 Télécharger le CV
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+
     </main>
   </div>
 
@@ -1031,6 +1244,7 @@
       <!-- Le média actif sera injecté ici -->
     </div>
   </div>
+  <div id="dl-toast" role="status" aria-live="polite">Téléchargement lancé…</div>
 
   <script>
     let lightbox = document.getElementById("lightbox");
@@ -1137,6 +1351,6 @@
   <script src="./js/sendNotification.js"></script>
   <script src="./js/challenge.js"></script>
   <script src="./js/visitor-tracking.js"></script>
-  <script></script>
+  <script src="./js/download.js"></script>
 </body>
 </html>
