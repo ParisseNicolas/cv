@@ -183,7 +183,7 @@ export default {
       // --- Origine autorisée (inchangé, regex de ton code) ---
       const origin = request.headers.get('origin');
       const allowedOriginsRegex = new RegExp('https://ubiquitous-rotary-phone[a-zA-Z0-9-_]+\\.app\\.github\\.dev');
-      const strictAllowedOrigins = 'https://parissenicolas.github.io/';
+      const strictAllowedOrigins = 'https://parissenicolas.github.io';
       if (origin && !allowedOriginsRegex.test(origin) && origin !== strictAllowedOrigins) {
         return new Response(`Forbidden : ${origin}`, { status: 403, headers: corsHeaders });
       }
