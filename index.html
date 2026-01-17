@@ -778,10 +778,10 @@
     - --lang-h     : hauteur approximative de la carte langues
   */
   :root {
-    --sticky-gap: 10px;
-    --hero-top: 10px;
-    --hero-h: 300px;   /* ajuste si ton hero est plus/moins haut */
-    --lang-h: 200px;   /* ajuste selon la hauteur de ta carte Langues */
+    --sticky-gap: 0px;
+    --hero-top: 1px;
+    --hero-h: 317px;   /* ajuste si ton hero est plus/moins haut */
+    --lang-h: 500px;   /* ajuste selon la hauteur de ta carte Langues */
   }
   
   /* Hero: déjà sticky, on s'assure de la valeur */
@@ -941,8 +941,8 @@
   /* Couleurs */
   --track-bg: rgba(60,111,209,0.16); /* piste neutre adoucie */
   --thumb-bg: var(--primary);        /* **pastille** = couleur fixe */
-  --label: #3c6fd1;         /* texte des extrémités */
-  --label-active: var(--text-soft);  /* accent léger pour l'état actif */
+  --label: var(--text-soft);         /* texte des extrémités */
+  --label-active: #3c6fd1;  /* accent léger pour l'état actif */
 
   position: relative;
   width: var(--w);
@@ -1098,11 +1098,12 @@
 
   </style>
 </head>
+
 <body>
   <div class="app">
     <header class="app-header">
-      <div class="logo-text">CV &middot; NICOLAS PARISSE</div>
-      <div class="tag-pill">QA Automation &middot; Cypress · API</div>
+      <div class="logo-text" data-i18n="header.logo">CV · NICOLAS PARISSE</div>
+      <div class="tag-pill" data-i18n="header.tagline">QA Automation · Cypress · API</div>
     </header>
 
     <main class="feed">
@@ -1111,33 +1112,35 @@
         <div class="card-inner">
           <div class="hero-header">
             <div class="avatar">
-              <!-- Remplace src par ton vrai chemin d'image -->
               <img src="cv/images/photo2.png" alt="Photo de Nicolas Parisse" />
-              <div class="avatar-badge">32</div>
+              <div class="avatar-badge" data-i18n="hero.age">32</div>
             </div>
             <div class="hero-info">
-              <h1 data-i18n="hero.firstname">Nicolas <span>Parisse</span></h1>
-              <div class="hero-role">QA Automation Engineer</div>
-              <div class="hero-location">Paris, Île-de-France, France</div>
+              <h1><span data-i18n="hero.firstname">Nicolas</span> <span>Parisse</span></h1>
+              <div class="hero-role" data-i18n="hero.role">QA Automation Engineer</div>
+              <div class="hero-location" data-i18n="hero.location">Paris, Île-de-France, France</div>
               <div class="hero-actions">
-                <button id="langToggle" role="switch" class="lang-toggle" type="button" aria-label="Switch language"><span class="thumb" aria-hidden="true"></span></button>
+                <button id="langToggle"
+                        role="switch"
+                        class="lang-toggle"
+                        type="button"
+                        aria-label="Switch language">
+                  <span class="thumb" aria-hidden="true"></span>
+                </button>
               </div>
             </div>
           </div>
 
           <div class="chips-row">
-            <div class="chip"><span class="chip-dot"></span>Cypress</div>
-            <div class="chip"><span class="chip-dot"></span>Tests API &ndash; Bruno</div>
-            <div class="chip"><span class="chip-dot"></span>CI/CD Azure DevOps</div>
-            <div class="chip"><span class="chip-dot"></span>Angular &middot; .NET Core</div>
-            <div class="chip"><span class="chip-dot"></span>Bash &amp; PowerShell</div>
+            <div class="chip"><span class="chip-dot"></span><span data-i18n="chips.cypress">Cypress</span></div>
+            <div class="chip"><span class="chip-dot"></span><span data-i18n="chips.apiBruno">Tests API – Bruno</span></div>
+            <div class="chip"><span class="chip-dot"></span><span data-i18n="chips.cicd">CI/CD Azure DevOps</span></div>
+            <div class="chip"><span class="chip-dot"></span><span data-i18n="chips.feBe">Angular · .NET Core</span></div>
+            <div class="chip"><span class="chip-dot"></span><span data-i18n="chips.shell">Bash &amp; PowerShell</span></div>
           </div>
 
           <p class="hero-quote" data-i18n="hero.quote">
-            Automatiser intelligemment, c’est assurer la qualité des procédés critiques.<br />
-            Ingénieur QA Automation spécialisé en Cypress, tests API et intégration CI/CD,
-            avec expérience sur projets à forte volumétrie et internationaux
-            (parcours critiques E2E, API, sécurité applicative, CI/CD intégrée).
+            Automatiser intelligemment [...]
           </p>
         </div>
       </section>
@@ -1145,10 +1148,10 @@
       <!-- COMPÉTENCES -->
       <section class="card main-card">
         <div class="card-inner">
-          <div class="section-label">Compétences clés</div>
+          <div class="section-label" data-i18n="sections.skills.label">Compétences clés</div>
           <div class="section-title">
-            QA Automation
-            <span>cypress &amp; api testing</span>
+            <span data-i18n="sections.skills.title">QA Automation</span>
+            <span data-i18n="sections.skills.badge">cypress &amp; api testing</span>
           </div>
 
           <div class="skills-grid">
@@ -1163,7 +1166,7 @@
             <div class="skill-pill" style="--value: 0.95turn;">
               <div class="skill-main">
                 <div class="skill-name">Bruno</div>
-                <div class="skill-sub">Tests API</div>
+                <div class="skill-sub" data-i18n="sections.skills.pill.1.sub">Tests API</div>
               </div>
               <div class="skill-meter"><span>95</span></div>
             </div>
@@ -1174,9 +1177,9 @@
                 <div class="skill-sub">Azure DevOps</div>
               </div>
               <div class="skill-meter"><span>80</span></div>
-            </div>
-
-            <div class="skill-pill" style="--value: 0.75turn;">
+          </div>
+          
+          <div class="skill-pill" style="--value: 0.75turn;">
               <div class="skill-main">
                 <div class="skill-name">Frontend</div>
                 <div class="skill-sub">Angular</div>
@@ -1201,38 +1204,43 @@
             </div>
           </div>
 
-          <div class="section-label" style="margin-top: 14px;">Outils &amp; méthodes</div>
-          <div class="mini-list">
-            <div class="mini-row">
-              <div class="mini-label">Git</div>
-              <div class="bar" style="--level: 1;">
-                <div class="bar-fill"></div>
-              </div>
-            </div>
-            <div class="mini-row">
-              <div class="mini-label">Sécurité (SAST, SCA, IaC)</div>
-              <div class="bar" style="--level: 0.81;">
-                <div class="bar-fill"></div>
-              </div>
-            </div>
-            <div class="mini-row">
-              <div class="mini-label">Agile (Epic, US, Sprint)</div>
-              <div class="bar" style="--level: 0.68;">
-                <div class="bar-fill"></div>
-              </div>
-            </div>
-            <div class="mini-row">
-              <div class="mini-label">IA (Copilot)</div>
-              <div class="bar" style="--level: 1;">
-                <div class="bar-fill"></div>
-              </div>
-            </div>
-            <div class="mini-row">
-              <div class="mini-label">ISTQB</div>
-              <div class="bar" style="--level: 0.85;">
-                <div class="bar-fill"></div>
-              </div>
-            </div>
+          <div class="section-label" style="margin-top: 14px;" data-i18n="sections.tools.label">Outils & méthodes</div>
+          <div class="mini-list">            
+<div class="mini-row">
+  <div class="mini-label" data-i18n="tools.git">Git</div>
+  <div class="bar" style="--level: 1;">
+    <div class="bar-fill"></div>
+  </div>
+</div>
+
+<div class="mini-row">
+  <div class="mini-label" data-i18n="tools.security">Sécurité (SAST, SCA, IaC)</div>
+  <div class="bar" style="--level: 0.81;">
+    <div class="bar-fill"></div>
+  </div>
+</div>
+
+<div class="mini-row">
+  <div class="mini-label" data-i18n="tools.agile">Agile (Epic, US, Sprint)</div>
+  <div class="bar" style="--level: 0.68;">
+    <div class="bar-fill"></div>
+  </div>
+</div>
+
+<div class="mini-row">
+  <div class="mini-label" data-i18n="tools.ai">IA (Copilot)</div>
+  <div class="bar" style="--level: 1;">
+    <div class="bar-fill"></div>
+  </div>
+</div>
+
+<div class="mini-row">
+  <div class="mini-label" data-i18n="tools.istqb">ISTQB</div>
+  <div class="bar" style="--level: 0.85;">
+    <div class="bar-fill"></div>
+  </div>
+</div>
+
           </div>
         </div>
       </section>
@@ -1240,85 +1248,115 @@
       <!-- LANGUES -->
       <section class="card sidebar-card langues-sticky">
         <div class="card-inner">
-          <div class="section-label">Langues</div>
+          <div class="section-label" data-i18n="sections.languages.label">Langues</div>
           <div class="section-title">
-            Communication
-            <span>fr / en</span>
+            <span data-i18n="sections.languages.title">Communication</span>
+            <span data-i18n="sections.languages.badge">fr / en</span>
           </div>
 
-          <div class="mini-list">
-            <div class="mini-row">
-              <div>
-                <div class="mini-label">Français</div>
-                <div class="lang-note">C2 &ndash; langue maternelle</div>
-              </div>
-              <div class="bar" style="--level: 1;">
-                <div class="bar-fill"></div>
-              </div>
-            </div>
+          
+<div class="mini-list">
+  <div class="mini-row">
+    <div>
+      <div class="mini-label" data-i18n="languages.fr.name">Français</div>
+      <div class="lang-note" data-i18n="languages.fr.level">C2 – langue maternelle</div>
+    </div>
+    <div class="bar" style="--level: 1;">
+      <div class="bar-fill"></div>
+    </div>
+  </div>
 
-            <div class="mini-row">
-              <div>
-                <div class="mini-label">Anglais</div>
-                <div class="lang-note">C1</div>
-              </div>
-              <div class="bar" style="--level: 0.8;">
-                <div class="bar-fill"></div>
-              </div>
-            </div>
-          </div>
+  <div class="mini-row">
+    <div>
+      <div class="mini-label" data-i18n="languages.en.name">Anglais</div>
+      <div class="lang-note" data-i18n="languages.en.level">C1</div>
+    </div>
+    <div class="bar" style="--level: 0.8;">
+      <div class="bar-fill"></div>
+    </div>
+  </div>
+</div>
+
         </div>
       </section>
 
       <!-- EXPÉRIENCE -->
       <section class="card main-card">
         <div class="card-inner">
-          <div class="section-label">Expérience</div>
+          <div class="section-label" data-i18n="sections.experience.label">Expérience</div>
           <div class="section-title">
-            Coexya
-            <span>paris</span>
+            <span data-i18n="experience.company">Coexya</span>
+            <span data-i18n="experience.locationBadge">paris</span>
           </div>
 
           <div class="timeline">
             <div class="xp-item">
               <div class="xp-header">
-                <div class="xp-role">Ingénieur Concepteur &ndash; QA Automation</div>
-                <div class="xp-date">2022 &ndash; Présent</div>
+                <div class="xp-role" data-i18n="experience.items.0.role">Ingénieur Concepteur – QA Automation</div>
+                <div class="xp-date" data-i18n="experience.items.0.dates">2022 – Présent</div>
               </div>
-              <!-- <div class="xp-company">Coexya · Paris</div> -->
               <ul class="xp-bullets">
-                <li>Mise en place <strong>from scratch</strong> de la stratégie QA</li>
-                <li>Un projet réunissant <strong>20+ collaborateurs</strong>.</li>
-                <li>Développement de <strong>200+ tests composants (UI)</strong> pour sécuriser les modules critiques. 
-                <li>Planification de <strong>10 parcours E2E</strong> couvrant les scénarios métier majeurs.</li>
-                <li>Automatisation de <strong>600+ requêtes API</strong> dédiées à la robustesse des services.</li>
-                <li>Intégration complète en <strong>CI/CD</strong> via Azure DevOps.</li>
-                <li>Intégration dans la <strong>CI/CD Azure DevOps</strong> (exécution, reporting, gating qualité).</li>
-                <li>Prise en charge de la <strong>sécurité applicative (CxOne)</strong>.</li>
-                <li>Sécurité applicative : intégration de <strong>scans de vulnérabilités</strong> (CheckmarxOne) dans les pipelines.</li>
+                <li data-i18n="experience.items.0.bullets.0" data-i18n-html="true">
+                  Mise en place <strong>from scratch</strong> de la stratégie QA
+                </li>
+
+                <li data-i18n="experience.items.0.bullets.1" data-i18n-html="true">
+                  Un projet réunissant <strong>20+ collaborateurs</strong>.
+                </li>
+
+                <li data-i18n="experience.items.0.bullets.2" data-i18n-html="true">
+                  Développement de <strong>200+ tests composants (UI)</strong> [...]
+                </li>
+
+                <li data-i18n="experience.items.0.bullets.3" data-i18n-html="true">
+                  Planification de <strong>10 parcours E2E</strong> [...]
+                </li>
+
+                <li data-i18n="experience.items.0.bullets.4" data-i18n-html="true">
+                  Automatisation de <strong>600+ requêtes API</strong> [...]
+                </li>
+
+                <li data-i18n="experience.items.0.bullets.5" data-i18n-html="true">
+                  Intégration complète en <strong>CI/CD</strong> [...]
+                </li>
+
+                <li data-i18n="experience.items.0.bullets.6" data-i18n-html="true">
+                  Intégration dans la <strong>CI/CD Azure DevOps</strong> [...]
+                </li>
+
+                <li data-i18n="experience.items.0.bullets.7" data-i18n-html="true">
+                  Prise en charge de la <strong>sécurité applicative (CxOne)</strong>.
+                </li>
+
+                <li data-i18n="experience.items.0.bullets.8" data-i18n-html="true">
+                  Sécurité applicative : intégration de <strong>scans de vulnérabilités</strong> [...]
+                </li>
               </ul>
             </div>
 
             <div class="xp-item">
               <div class="xp-header">
-                <div class="xp-role">Analyste Ingénieur</div>
-                <div class="xp-date">2020 &ndash; 2022</div>
+                <div class="xp-role" data-i18n="experience.items.1.role">Analyste Ingénieur</div>
+                <div class="xp-date" data-i18n="experience.items.1.dates">2020 – 2022</div>
               </div>
-              <!-- <div class="xp-company">Coexya · Paris</div> -->
               <ul class="xp-bullets">
-                <li>Analyse des besoins, estimation du workload, revue de code.</li>
-                <li>Responsable de la <strong>sécurité web</strong>.</li>
+                <li data-i18n="experience.items.1.bullets.0">Analyse des besoins [...]</li>
+
+                <li data-i18n="experience.items.1.bullets.1" data-i18n-html="true">
+                  Responsable de la <strong>sécurité web</strong>.
+                </li>
               </ul>
             </div>
 
             <div class="xp-item">
               <div class="xp-header">
-                <div class="xp-role">Ingénieur d&apos;études</div>
-                <div class="xp-date">2018 &ndash; 2020</div>
+                <div class="xp-role" data-i18n="experience.items.2.role">Ingénieur d'études</div>
+                <div class="xp-date" data-i18n="experience.items.2.dates">2018 – 2020</div>
               </div>
-              <!-- <div class="xp-company">Coexya · Paris</div> -->
               <ul class="xp-bullets">
-                <li>Développeur <strong>full stack</strong> (.NET Framework, SQL, applications web).</li>
+                <li data-i18n="experience.items.2.bullets.0" data-i18n-html="true">
+                  Développeur <strong>full stack</strong> (.NET Framework, SQL [...] )
+                </li>
               </ul>
             </div>
           </div>
@@ -1328,112 +1366,136 @@
       <!-- INTERNATIONAL & FORMATION -->
       <section class="card main-card">
         <div class="card-inner">
-          <div class="section-label">International &amp; formation</div>
-          <div class="section-title">
-            Parcours
-            <span>nz &middot; irlande &middot; from Paris</span>
-          </div>
+          <div class="section-label" data-i18n="sections.intlEdu.label">International &amp; formation</div>
+<div class="section-title">
+  <span data-i18n="sections.intlEdu.title">Parcours</span>
+  <span data-i18n="sections.intlEdu.badge">nz · irlande · from Paris</span>
+</div>
 
-          <div class="tag-wrapper">
-            <div class="tag-card">
-              <div class="tag-title"><span class="blurred">welltried</span></div>
-              <div class="tag-sub">Projet SaaS avec technos récentes from scratch &ndash; Automatisation des tests</div>
-              <div class="tag-meta">En développement</div>
-            </div>
-            <div class="tag-card">
-              <div class="tag-title">IPONZ</div>
-              <div class="tag-sub">Gouvernement de Nouvelle-Zélande &ndash; Website propriété intellectuelle</div>
-              <div class="tag-meta">Projet à fort volumétrie</div>
-            </div>
+<div class="tag-wrapper">
+  <div class="tag-card">
+    <div class="tag-title">
+      <span class="blurred" data-i18n="intl.items.0.title">welltried</span>
+    </div>
+    <div class="tag-sub" data-i18n="intl.items.0.subtitle">
+      Projet SaaS avec technos récentes from scratch – Automatisation des tests
+    </div>
+    <div class="tag-meta" data-i18n="intl.items.0.meta">En développement</div>
+  </div>
 
-            <div class="tag-card">
-              <div class="tag-title">RESOLVE</div>
-              <div class="tag-sub">Ministère de la Justice &ndash; Nouvelle-Zélande &ndash; Gestion des plaintes</div>
-              <div class="tag-meta">Website métier &ndash; flux critiques</div>
-            </div>
+  <div class="tag-card">
+    <div class="tag-title" data-i18n="intl.items.1.title">IPONZ</div>
+    <div class="tag-sub" data-i18n="intl.items.1.subtitle">
+      Gouvernement de Nouvelle-Zélande – Website propriété intellectuelle
+    </div>
+    <div class="tag-meta" data-i18n="intl.items.1.meta">Projet à fort volumétrie</div>
+  </div>
 
-            <div class="tag-card">
-              <div class="tag-title">IPO</div>
-              <div class="tag-sub">Gouvernement d&apos;Irlande &ndash; Website propriété intellectuelle</div>
-              <div class="tag-meta">Qualité et continuité de service</div>
-            </div>
-          </div>
+  <div class="tag-card">
+    <div class="tag-title" data-i18n="intl.items.2.title">RESOLVE</div>
+    <div class="tag-sub" data-i18n="intl.items.2.subtitle">
+      Ministère de la Justice – Nouvelle-Zélande – Gestion des plaintes
+    </div>
+    <div class="tag-meta" data-i18n="intl.items.2.meta">Website métier – flux critiques</div>
+  </div>
 
-          <div class="section-label" style="margin-top: 14px;">Formation</div>
-          <div class="tag-wrapper">
-            <div class="tag-card">
-              <div class="tag-title">Diplôme d&apos;ingénieur</div>
-              <div class="tag-sub">Institut d&apos;Optique Graduate School</div>
-              <div class="tag-meta">2018</div>
-            </div>
+  <div class="tag-card">
+    <div class="tag-title" data-i18n="intl.items.3.title">IPO</div>
+    <div class="tag-sub" data-i18n="intl.items.3.subtitle">
+      Gouvernement d'Irlande – Website propriété intellectuelle
+    </div>
+    <div class="tag-meta" data-i18n="intl.items.3.meta">Qualité et continuité de service</div>
+  </div>
+</div>
+<div class="section-label" style="margin-top: 14px;" data-i18n="sections.education.label">
+  Formation
+</div>
 
-            <div class="tag-card">
-              <div class="tag-title">Master Informatique</div>
-              <div class="tag-sub">Université de Bordeaux</div>
-              <div class="tag-meta">2018</div>
-            </div>
-          </div>
+<div class="tag-wrapper">
+
+  <div class="tag-card">
+    <div class="tag-title" data-i18n="education.items.0.title">Diplôme d'ingénieur</div>
+    <div class="tag-sub" data-i18n="education.items.0.school">Institut d'Optique Graduate School</div>
+    <div class="tag-meta" data-i18n="education.items.0.year">2018</div>
+  </div>
+
+  <div class="tag-card">
+    <div class="tag-title" data-i18n="education.items.1.title">Master Informatique</div>
+    <div class="tag-sub" data-i18n="education.items.1.school">Université de Bordeaux</div>
+    <div class="tag-meta" data-i18n="education.items.1.year">2018</div>
+  </div>
+</div>
         </div>
-      </section>
+</section>
 
-      <!-- HOBBIES -->
-      <section class="card main-card">
-        <div class="card-inner">
-          <div class="section-label">Hobbies</div>
-          <div class="section-title">
-            Centres d’intérêt
-            <span>perso</span>
-          </div>
+<!-- HOBBIES -->
+<section class="card main-card">
+  <div class="card-inner">
 
-          <div class="tag-wrapper">
+    <div class="section-label" data-i18n="sections.hobbies.label">Hobbies</div>
 
-            <!-- Escalade -->
-            <div class="tag-card">
-              <div class="tag-title">Escalade</div>
-              <div class="tag-sub">Bleau, grandes voies, difficulté. Objectif 8a !</div>
+    <div class="section-title">
+      <span data-i18n="sections.hobbies.title">Centres d’intérêt</span>
+      <span data-i18n="sections.hobbies.badge">perso</span>
+    </div>
 
-              <!-- Vidéo escalade -->
-              <video  
-                muted 
-                playsinline 
-                preload="metadata" 
-                onclick="openLightbox(['cv/escalade.mp4'], 0)"
-                style="width:50%; aspect-ratio: 1; display: block; margin: 8px auto 0; border-radius:14px; object-fit: cover;">
-                <source src="cv/escalade.mp4" type="video/mp4">
-              </video>
+    <div class="tag-wrapper">
 
-              <div class="tag-meta" style="text-align: center;">Crotale 7a - Fontainebleau</div>
-            </div>
+      <!-- Escalade -->
+      <div class="tag-card">
+        <div class="tag-title" data-i18n="hobbies.climbing.title">Escalade</div>
+        <div class="tag-sub" data-i18n="hobbies.climbing.subtitle">
+          Bleau, grandes voies, difficulté. Objectif 8a !
+        </div>
 
-            <!-- Échecs -->
-            <div class="tag-card chess-card">
-              <div class="tag-title">Échecs</div>
-              <div class="tag-sub">
-                Classement Lichess : 1700+
-              </div>
-              <div class="tag-meta">
-                <a href="javascript:void(0);" onclick="createLichessChallengeLink()">
-                  Me défier sur Lichess
-                </a>
-              </div>
-            </div>
+        <!-- Vidéo escalade -->
+        <video  
+          muted 
+          playsinline 
+          preload="metadata" 
+          onclick="openLightbox(['cv/escalade.mp4'], 0)"
+          style="width:50%; aspect-ratio: 1; display: block; margin: 8px auto 0; border-radius:14px; object-fit: cover;">
+          <source src="cv/escalade.mp4" type="video/mp4">
+        </video>
+
+        <div class="tag-meta" style="text-align: center;" data-i18n="hobbies.climbing.caption">
+          Crotale 7a - Fontainebleau
+        </div>
+      </div>
+
+      <!-- Échecs -->
+      <div class="tag-card chess-card">
+        <div class="tag-title" data-i18n="hobbies.chess.title">Échecs</div>
+
+        <div class="tag-sub" data-i18n="hobbies.chess.subtitle">
+          Classement Lichess : 1700+
+        </div>
+
+        <div class="tag-meta">
+          <a href="javascript:void(0);" onclick="createLichessChallengeLink()">
+            <span data-i18n="hobbies.chess.cta">Me défier sur Lichess</span>
+          </a>
+        </div>
+      </div>
 
 
-            <!-- Road trip -->
-            <div class="tag-card">
-              <div class="tag-title">Voyage</div>
-              <div class="tag-sub">Europe</div>
+      <!-- Road trip -->
+      <div class="tag-card">
+        <div class="tag-title" data-i18n="hobbies.travel.title">Voyage</div>
+        <div class="tag-sub" data-i18n="hobbies.travel.subtitle">Europe</div>
 
-              <div style="display:flex; gap:8px; overflow-x:auto; padding:4px 0;">
-                <img src="cv/roadtrip/vernazza.jpg" 
+        <div style="display:flex; gap:8px; overflow-x:auto; padding:4px 0;">
+          <img src="cv/roadtrip/vernazza.jpg" 
                     alt="Vernazza" 
                     onclick="openLightbox(['cv/roadtrip/vernazza.jpg','cv/roadtrip/Terrasse.jpg','cv/roadtrip/Nicolas et met.jpg', 'cv/roadtrip/porto.jpg', 'cv/roadtrip/grandeVoie.jpg'], 0)"
                     style="height:120px; border-radius:12px; flex-shrink:0;">
-                <img src="cv/roadtrip/Terrasse.jpg" 
+
+          <img src="cv/roadtrip/Terrasse.jpg" 
                     alt="Terrasse" 
                     onclick="openLightbox(['cv/roadtrip/vernazza.jpg','cv/roadtrip/Terrasse.jpg','cv/roadtrip/Nicolas et met.jpg', 'cv/roadtrip/porto.jpg', 'cv/roadtrip/grandeVoie.jpg'], 1)"
                     style="height:120px; border-radius:12px; flex-shrink:0;">
-                <img src="cv/roadtrip/Nicolas et met.jpg" 
+
+          <img src="cv/roadtrip/Nicolas et met.jpg" 
                     alt="Nicolas et met" 
                     onclick="openLightbox(['cv/roadtrip/vernazza.jpg','cv/roadtrip/Terrasse.jpg','cv/roadtrip/Nicolas et met.jpg', 'cv/roadtrip/porto.jpg', 'cv/roadtrip/grandeVoie.jpg'], 2)"
                     style="height:120px; border-radius:12px; flex-shrink:0;">
@@ -1445,97 +1507,62 @@
                     alt="Terrasse" 
                     onclick="openLightbox(['cv/roadtrip/vernazza.jpg','cv/roadtrip/Terrasse.jpg','cv/roadtrip/Nicolas et met.jpg', 'cv/roadtrip/porto.jpg', 'cv/roadtrip/grandeVoie.jpg'], 4)"
                     style="height:120px; border-radius:12px; flex-shrink:0;">
-              </div>
-
-              <div class="tag-meta">Europe</div>
-            </div>
-
-
-          </div>
         </div>
-      </section>
+
+        <div class="tag-meta" data-i18n="hobbies.travel.meta">Europe</div>
+      </div>
 
 
-      <!-- CONTACT -->
-      <section class="card sidebar-card contact-sticky">
-        <div class="card-inner">
-          <div class="section-label">Contact</div>
-          <div class="section-title">
-            Me joindre
-            <span>disponible pour échange</span>
-          </div>
-
-          <div class="contact-row">
-            <a class="contact-item" href="mailto:nicolas.parisse.93@gmail.com">
-              <div class="contact-icon">@</div>
-              <div>
-                <div class="contact-label">Email</div>
-                <div class="contact-value">nicolas.parisse.93@gmail.com</div>
-              </div>
-            </a>
-
-            <a class="contact-item" href="tel:+33685743744">
-              <div class="contact-icon">📞</div>
-              <div>
-                <div class="contact-label">Téléphone</div>
-                <div class="contact-value">06 85 74 37 44</div>
-              </div>
-            </a>
-
-            <a class="contact-item" href="https://www.linkedin.com/in/nicolas-parisse-034b70b9/" target="_blank" rel="noopener noreferrer">
-              <div class="contact-icon">in</div>
-              <div>
-                <div class="contact-label">LinkedIn</div>
-                <div class="contact-value">linkedin.com/in/nicolas-parisse</div>
-              </div>
-            </a>
-
-            <a class="contact-item" href="https://www.google.com/maps?q=Paris+12e" target="_blank" rel="noopener noreferrer">
-              <div class="contact-icon">📍</div>
-              <div>
-                <div class="contact-label">Localisation</div>
-                <div class="contact-value">Paris 12e</div>
-              </div>
-            </a>
-          </div>
-
-          <!-- <div class="nav-dots">
-            <div class="nav-dot nav-dot--active"></div>
-            <div class="nav-dot"></div>
-            <div class="nav-dot"></div>
-          </div> -->
-        </div>
-      </section>
-
-       
+    </div>
+  </div>
+</section>
 
 
-<section class="card main-card download-card">
+<!-- CONTACT -->
+<section class="card sidebar-card contact-sticky">
   <div class="card-inner">
 
-    <div class="section-label">Téléchargement</div>
+    <div class="section-label" data-i18n="sections.contact.label">Contact</div>
+
     <div class="section-title">
-            Version classique
-            <span>PDF</span>
-          </div>
-    <div class="download-layout">
+      <span data-i18n="sections.contact.title">Me joindre</span>
+      <span data-i18n="sections.contact.badge">disponible pour échange</span>
+    </div>
 
-      <!-- Gauche : miniature du PDF -->
-      <div class="dl-left">
-        <img src="cv/images/preview.png" 
-             alt="Aperçu du CV PDF" 
-             class="pdf-thumb"/>
-      </div>
+    <div class="contact-row">
 
-      <!-- Droite : QR + bouton -->
-      <div class="dl-right">
-        <a href="cv/CV_Nicolas_Parisse.pdf"
-           download
-           class="download-button" onclick="cvDownloadedNotification()">
-          📄 Télécharger le CV
-        </a>
+      <a class="contact-item" href="mailto:nicolas.parisse.93@gmail.com">
+        <div class="contact-icon">@</div>
+        <div>
+          <div class="contact-label" data-i18n="contact.email.label">Email</div>
+          <div class="contact-value" data-i18n="contact.email.value">nicolas.parisse.93@gmail.com</div>
+        </div>
+      </a>
 
-      </div>
+      <a class="contact-item" href="tel:+33685743744">
+        <div class="contact-icon">📞</div>
+        <div>
+          <div class="contact-label" data-i18n="contact.phone.label">Téléphone</div>
+          <div class="contact-value" data-i18n="contact.phone.value">06 85 74 37 44</div>
+        </div>
+      </a>
+
+      <a class="contact-item" href="https://www.linkedin.com/in/nicolas-parisse-034b70b9/" target="_blank" rel="noopener noreferrer">
+        <div class="contact-icon">in</div>
+        <div>
+          <div class="contact-label" data-i18n="contact.linkedin.label">LinkedIn</div>
+          <div class="contact-value" data-i18n="contact.linkedin.value">linkedin.com/in/nicolas-parisse</div>
+        </div>
+      </a>
+
+      <a class="contact-item" href="https://www.google.com/maps?q=Paris+12e" target="_blank" rel="noopener noreferrer"></a>
+        <div class="contact-icon">📍</div>
+        <div>
+          <div class="contact-label" data-i18n="contact.location.label">Localisation</div>
+          <div class="contact-value" data-i18n="contact.location.value">Paris 12e</div>
+        </div>
+      </a>
+
     </div>
 
   </div>
@@ -1543,17 +1570,46 @@
 
 
 
+      <!-- TÉLÉCHARGEMENT -->
+      <section class="card main-card download-card">
+        <div class="card-inner">
+
+          <div class="section-label" data-i18n="sections.download.label">Téléchargement</div>
+    <div class="section-title" data-i18n="sections.download.title" data-i18n-html="true">
+            Version classique
+            <span>PDF</span>
+          </div>
+          <div class="download-layout">
+            <div class="dl-left">
+              <img src="cv/images/preview.png" 
+             alt="Aperçu du CV PDF" 
+             class="pdf-thumb"/>
+            </div>
+
+            <div class="dl-right">
+              <a href="cv/CV_Nicolas_Parisse.pdf"
+           download
+           class="download-button" onclick="cvDownloadedNotification()">
+                <span data-i18n="download.cta">📄 Télécharger le CV</span>
+              </a>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
 
     </main>
   </div>
 
   <div id="lightbox" class="lightbox hidden">
-    <div class="lightbox-close" onclick="closeLightbox()">✕</div>
-    <div class="lightbox-inner" id="lightboxInner" tabindex="0">
-      <!-- Le média actif sera injecté ici -->
-    </div>
+    <div class="lightbox-close" onclick="closeLightbox()" data-i18n="ui.close">✕</div>
+    <div class="lightbox-inner" id="lightboxInner" tabindex="0"></div>
   </div>
-  <div id="dl-toast" role="status" aria-live="polite">Téléchargement lancé…</div>
+
+  <div id="dl-toast" role="status" aria-live="polite" data-i18n="download.toast">
+    Téléchargement lancé…
+  </div>
 
   <script>
     let lightbox = document.getElementById("lightbox");

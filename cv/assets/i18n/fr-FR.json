@@ -1,15 +1,20 @@
 
 {
+  "header": {
+    "logo": "CV · NICOLAS PARISSE",
+    "tagline": "QA Automation · Cypress · API"
+  },
   "hero": {
-    "firstName": "Nicolas",
-    "role": "QA Automation Engineer",
+    "firstname": "Nicolas",
+    "role": "Ingénieur QA Automatisation",
     "location": "Paris, Île-de-France, France",
-    "quote": "Automatiser intelligemment, c’est assurer la qualité des procédés critiques. Ingénieur QA Automation spécialisé en Cypress, tests API et intégration CI/CD, avec expérience sur projets à forte volumétrie et internationaux.",
-    "photoAlt": "Photo de Nicolas Parisse"
+    "quote": "Automatiser intelligemment, c’est assurer la qualité des procédés critiques. Ingénieur QA Automation spécialisé en Cypress, tests API et intégration CI/CD, avec expérience sur projets à forte volumétrie et internationaux (parcours critiques E2E, API, sécurité applicative, CI/CD intégrée).",
+    "photoAlt": "Photo de Nicolas Parisse",
+    "age": "32"
   },
   "chips": {
     "cypress": "Cypress",
-    "api": "Tests API – Bruno",
+    "apiBruno": "Tests API – Bruno",
     "cicd": "CI/CD Azure DevOps",
     "feBe": "Angular · .NET Core",
     "shell": "Bash & PowerShell"
@@ -17,14 +22,228 @@
   "sections": {
     "skills": {
       "label": "Compétences clés",
-      "title": "QA Automation",
-      "badge": "cypress & tests API"
+      "title": "QA Automatisation",
+      "badge": "cypress & test api",
+      "pill": {
+        "1": {
+          "sub": "Tests API"
+        }
+      }
+    },
+    "tools": {
+      "label": "Outils & méthodes",
+      "git": "Git",
+      "security": "Sécurité (SAST, SCA, IaC)",
+      "agile": "Agile (Epic, US, Sprint)",
+      "ai": "IA (Copilot)",
+      "istqb": "ISTQB"
+    },
+    "languages": {
+      "label": "Langues",
+      "title": "Communication",
+      "badge": "fr / en",
+      "fr": {
+        "name": "Français",
+        "level": "C2 – langue maternelle"
+      },
+      "en": {
+        "name": "Anglais",
+        "level": "C1"
+      }
+    },
+    "experience": {
+      "label": "Expérience"
+    },
+    "intlEdu": {
+      "label": "International & formation",
+      "title": "Parcours",
+      "badge": "NZ · Irlande · from Paris"
+    },
+    "education": {
+      "label": "Formation"
+    },
+    "hobbies": {
+      "label": "Hobbies",
+      "title": "Centres d’intérêt",
+      "badge": "perso"
+    },
+    "contact": {
+      "label": "Contact",
+      "title": "Me joindre",
+      "badge": "disponible pour échange"
+    },
+    "download": {
+      "label": "Téléchargement",
+      "title": "Version classique <span>PDF</span>",
+      "badge": "PDF",
+      "button": "📄 Télécharger le CV"
     }
   },
-  "ui": {
-    "lang": {
-      "fr": "🇫🇷 FR",
-      "en": "🇬🇧 EN"
+  "skills": {
+    "cypress": {
+      "title": "Cypress",
+      "subtitle": "UI / Component / E2E"
+    },
+    "bruno": {
+      "title": "Bruno",
+      "subtitle": "Tests API"
+    },
+    "cicd": {
+      "title": "CI/CD",
+      "subtitle": "Azure DevOps"
+    },
+    "frontend": {
+      "title": "Frontend",
+      "subtitle": "Angular"
+    },
+    "backend": {
+      "title": "Backend",
+      "subtitle": ".NET Core"
+    },
+    "scripting": {
+      "title": "Scripting",
+      "subtitle": "Bash / PowerShell"
     }
+  },
+  "tools": {
+    "git": "Git",
+    "security": "Sécurité (SAST, SCA, IaC)",
+    "agile": "Agile (Epic, US, Sprint)",
+    "ai": "IA (Copilot)",
+    "istqb": "ISTQB"
+  },
+  "languages": {
+    "fr": {
+      "name": "Français",
+      "level": "C2 – langue maternelle"
+    },
+    "en": {
+      "name": "Anglais",
+      "level": "C1"
+    }
+  },
+  "experience": {
+    "company": "Coexya",
+    "locationBadge": "paris",
+    "items": [
+      {
+        "role": "Ingénieur Concepteur – QA Automation",
+        "dates": "2022 – Présent",
+        "bullets": [
+          "Mise en place <strong>from scratch</strong> de la stratégie QA",
+          "Un projet réunissant <strong>20+ collaborateurs</strong>.",
+          "Développement de <strong>200+ tests composants (UI)</strong> pour sécuriser les modules critiques.",
+          "Planification de <strong>10 parcours E2E</strong> couvrant les scénarios métier majeurs.",
+          "Automatisation de <strong>600+ requêtes API</strong> dédiées à la robustesse des services.",
+          "Intégration complète en <strong>CI/CD</strong> via Azure DevOps.",
+          "Intégration dans la <strong>CI/CD Azure DevOps</strong> (exécution, reporting, gating qualité).",
+          "Prise en charge de la <strong>sécurité applicative (CxOne)</strong>.",
+          "Sécurité applicative : intégration de <strong>scans de vulnérabilités</strong> (CheckmarxOne) dans les pipelines."
+        ]
+      },
+      {
+        "role": "Analyste Ingénieur",
+        "dates": "2020 – 2022",
+        "bullets": [
+          "Analyse des besoins, estimation du workload, revue de code.",
+          "Responsable de la <strong>sécurité web</strong>."
+        ]
+      },
+      {
+        "role": "Ingénieur d'études",
+        "dates": "2018 – 2020",
+        "bullets": [
+          "Développeur <strong>full stack</strong> (.NET Framework, SQL, applications web)."
+        ]
+      }
+    ]
+  },
+  "intl": {
+    "items": [
+      {
+        "title": "welltried",
+        "subtitle": "Projet SaaS avec technos récentes from scratch – Automatisation des tests",
+        "meta": "En développement"
+      },
+      {
+        "title": "IPONZ",
+        "subtitle": "Gouvernement de Nouvelle-Zélande – Website propriété intellectuelle",
+        "meta": "Projet à fort volumétrie"
+      },
+      {
+        "title": "RESOLVE",
+        "subtitle": "Ministère de la Justice – Nouvelle-Zélande – Gestion des plaintes",
+        "meta": "Website métier – flux critiques"
+      },
+      {
+        "title": "IPO",
+        "subtitle": "Gouvernement d'Irlande – Website propriété intellectuelle",
+        "meta": "Qualité et continuité de service"
+      }
+    ]
+  },
+  "education": {
+    "items": [
+      {
+        "title": "Diplôme d'ingénieur",
+        "school": "Institut d'Optique Graduate School",
+        "year": "2018"
+      },
+      {
+        "title": "Master Informatique",
+        "school": "Université de Bordeaux",
+        "year": "2018"
+      }
+    ]
+  },
+  "hobbies": {
+    "climbing": {
+      "title": "Escalade",
+      "subtitle": "Bleau, grandes voies, difficulté. Objectif 8a !",
+      "caption": "Crotale 7a - Fontainebleau"
+    },
+    "chess": {
+      "title": "Échecs",
+      "subtitle": "Classement Lichess : 1700+",
+      "cta": "Me défier sur Lichess"
+    },
+    "travel": {
+      "title": "Voyage",
+      "subtitle": "Europe",
+      "meta": "Europe",
+      "photos": {
+        "vernazzaAlt": "Vernazza",
+        "terrasseAlt": "Terrasse",
+        "coupleAlt": "Nicolas et moi",
+        "portoAlt": "Porto",
+        "multiPitchAlt": "Grande voie"
+      }
+    }
+  },
+  "contact": {
+    "email": {
+      "label": "Email",
+      "value": "nicolas.parisse.93@gmail.com"
+    },
+    "phone": {
+      "label": "Téléphone",
+      "value": "06 85 74 37 44"
+    },
+    "linkedin": {
+      "label": "LinkedIn",
+      "value": "linkedin.com/in/nicolas-parisse"
+    },
+    "location": {
+      "label": "Localisation",
+      "value": "Paris 12e"
+    }
+  },
+  "download": {
+    "toast": "Téléchargement lancé…",
+    "cta": "📄 Télécharger le CV",
+    "previewAlt": "Aperçu du CV PDF"
+  },
+  "ui": {
+    "close": "✕"
   }
 }

@@ -1,30 +1,249 @@
 
 {
+  "header": {
+    "logo": "CV · NICOLAS PARISSE",
+    "tagline": "QA Automation · Cypress · API"
+  },
   "hero": {
-    "firstName": "Nicolas",
+    "firstname": "Nicolas",
     "role": "QA Automation Engineer",
     "location": "Paris, Île-de-France, France",
-    "quote": "Smart automation secures critical processes. QA Automation Engineer specialized in Cypress, API testing and CI/CD integration, with experience on high-volume and international projects.",
-    "photoAlt": "Photo of Nicolas Parisse"
+    "quote": "Smart automation is key to ensuring the quality of critical processes. QA Automation Engineer specialized in Cypress, API testing, and CI/CD integration, with experience in high-volume and international projects (critical E2E journeys, APIs, application security, integrated CI/CD).",
+    "photoAlt": "Photo of Nicolas Parisse",
+    "age": "32"
   },
   "chips": {
     "cypress": "Cypress",
-    "api": "API testing – Bruno",
+    "apiBruno": "API Testing",
     "cicd": "CI/CD Azure DevOps",
     "feBe": "Angular · .NET Core",
     "shell": "Bash & PowerShell"
   },
   "sections": {
     "skills": {
-      "label": "Key skills",
+      "label": "Key Skills",
       "title": "QA Automation",
-      "badge": "cypress & api testing"
+      "badge": "cypress & api testing",
+      "pill": {
+        "1": {
+          "sub": "API Testing"
+        }
+      }
+    },
+    "tools": {
+      "git": "Git",
+      "security": "Security (SAST, SCA, IaC)",
+      "agile": "Agile (Epics, US, Sprints)",
+      "ai": "AI (Copilot)",
+      "istqb": "ISTQB",
+      "label": "Tools & Methods"
+    },
+    "languages": {
+      "label": "Languages",
+      "title": "Communication",
+      "badge": "fr / en",
+      "fr": {
+        "name": "French",
+        "level": "C2 – native speaker"
+      },
+      "en": {
+        "name": "English",
+        "level": "C1"
+      }
+    },
+    "experience": {
+      "label": "Experience"
+    },
+    "intlEdu": {
+      "label": "International & Education",
+      "title": "Background",
+      "badge": "NZ · Ireland · from Paris"
+    },
+    "education": {
+      "label": "Education"
+    },
+    "hobbies": {
+      "label": "Hobbies",
+      "title": "Personal Interests",
+      "badge": "personal"
+    },
+    "contact": {
+      "label": "Contact",
+      "title": "Get in Touch",
+      "badge": "available to talk",
+      "button": "📄 Download the CV"
+    },
+    "download": {
+      "label": "Download",
+      "title": "Classic Version <span>PDF</span>",
+      "badge": "PDF"
     }
   },
-  "ui": {
-    "lang": {
-      "fr": "🇫🇷 FR",
-      "en": "🇬🇧 EN"
+  "skills": {
+    "cypress": {
+      "title": "Cypress",
+      "subtitle": "UI / Component / E2E"
+    },
+    "bruno": {
+      "title": "Bruno",
+      "subtitle": "API Testing"
+    },
+    "cicd": {
+      "title": "CI/CD",
+      "subtitle": "Azure DevOps"
+    },
+    "frontend": {
+      "title": "Frontend",
+      "subtitle": "Angular"
+    },
+    "backend": {
+      "title": "Backend",
+      "subtitle": ".NET Core"
+    },
+    "scripting": {
+      "title": "Scripting",
+      "subtitle": "Bash / PowerShell"
     }
+  },
+  "tools": {
+    "git": "Git",
+    "security": "Security (SAST, SCA, IaC)",
+    "agile": "Agile (Epics, US, Sprints)",
+    "ai": "AI (Copilot)",
+    "istqb": "ISTQB"
+  },
+  "languages": {
+    "fr": {
+      "name": "French",
+      "level": "C2 – native speaker"
+    },
+    "en": {
+      "name": "English",
+      "level": "C1"
+    }
+  },
+  "experience": {
+    "company": "Coexya",
+    "locationBadge": "paris",
+    "items": [
+      {
+        "role": "Design Engineer – QA Automation",
+        "dates": "2022 – Present",
+        "bullets": [
+          "Built the QA strategy <strong>from scratch</strong>.",
+          "Project involving <strong>20+ contributors</strong>.",
+          "Developed <strong>200+ component tests (UI)</strong> securing critical modules.",
+          "Designed <strong>10 E2E journeys</strong> covering major business scenarios.",
+          "Automated <strong>600+ API requests</strong> ensuring service robustness.",
+          "Full integration into <strong>CI/CD</strong> via Azure DevOps.",
+          "Integration into <strong>Azure DevOps CI/CD</strong> (execution, reporting, quality gating).",
+          "Oversaw <strong>application security (CxOne)</strong>.",
+          "Integrated <strong>vulnerability scanning</strong> (CheckmarxOne) into pipelines."
+        ]
+      },
+      {
+        "role": "Analyst Engineer",
+        "dates": "2020 – 2022",
+        "bullets": [
+          "Requirements analysis, workload estimation, code review.",
+          "Responsible for <strong>web security</strong>."
+        ]
+      },
+      {
+        "role": "Software Engineer",
+        "dates": "2018 – 2020",
+        "bullets": [
+          "Full‑stack <strong>developer</strong> (.NET Framework, SQL, web applications)."
+        ]
+      }
+    ]
+  },
+  "intl": {
+    "items": [
+      {
+        "title": "welltried",
+        "subtitle": "SaaS project built from scratch with modern technologies – Test automation",
+        "meta": "In development"
+      },
+      {
+        "title": "IPONZ",
+        "subtitle": "New Zealand Government – Intellectual Property Office website",
+        "meta": "High‑volume project"
+      },
+      {
+        "title": "RESOLVE",
+        "subtitle": "New Zealand Ministry of Justice – Complaints management system",
+        "meta": "Business‑critical workflows"
+      },
+      {
+        "title": "IPO",
+        "subtitle": "Irish Government – Intellectual Property Office website",
+        "meta": "Quality and service continuity"
+      }
+    ]
+  },
+  "education": {
+    "items": [
+      {
+        "title": "Engineering Degree",
+        "school": "Institut d’Optique Graduate School",
+        "year": "2018"
+      },
+      {
+        "title": "Master’s Degree in Computer Science",
+        "school": "University of Bordeaux",
+        "year": "2018"
+      }
+    ]
+  },
+  "hobbies": {
+    "climbing": {
+      "title": "Rock Climbing",
+      "subtitle": "Bouldering, multi‑pitch, difficulty. Goal: 8a!",
+      "caption": "Crotale 7a - Fontainebleau"
+    },
+    "chess": {
+      "title": "Chess",
+      "subtitle": "Lichess rating: 1700+",
+      "cta": "Challenge me on Lichess"
+    },
+    "travel": {
+      "title": "Travel",
+      "subtitle": "Europe",
+      "meta": "Europe",
+      "photos": {
+        "vernazzaAlt": "Vernazza",
+        "terrasseAlt": "Terrace",
+        "coupleAlt": "Nicolas and partner",
+        "portoAlt": "Porto",
+        "multiPitchAlt": "Multi‑pitch climb"
+      }
+    }
+  },
+  "contact": {
+    "email": {
+      "label": "Email",
+      "value": "nicolas.parisse.93@gmail.com"
+    },
+    "phone": {
+      "label": "Phone",
+      "value": "06 85 74 37 44"
+    },
+    "linkedin": {
+      "label": "LinkedIn",
+      "value": "linkedin.com/in/nicolas-parisse"
+    },
+    "location": {
+      "label": "Location",
+      "value": "Paris 12th"
+    }
+  },
+  "download": {
+    "toast": "Download started…",
+    "cta": "📄 Download CV",
+    "previewAlt": "CV PDF preview"
+  },
+  "ui": {
+    "close": "✕"
   }
 }
