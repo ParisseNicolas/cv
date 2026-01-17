@@ -901,12 +901,21 @@
 /* Confort drag souris */
 .lightbox-inner, .lightbox-slide, .lightbox-slide img, .lightbox-slide video {
   user-select: none;
-  -webkit-user-drag: none;
 }
 
 
 .lightbox-inner { cursor: grab; }
 .lightbox-inner.dragging { cursor: grabbing; }
+
+.lightbox-inner.dragging .lightbox-slide img,
+.lightbox-inner.dragging .lightbox-slide video {
+  pointer-events: none;
+}
+
+/* Anti-sélection pendant le drag (confort) */
+.lightbox, .lightbox-inner, .lightbox-slide, .lightbox-slide img, .lightbox-slide video {
+  user-select: none;
+}
 
 }
 
@@ -1360,7 +1369,7 @@
 
   <div id="lightbox" class="lightbox hidden">
     <div class="lightbox-close" onclick="closeLightbox()">✕</div>
-    <div class="lightbox-inner" id="lightboxInner">
+    <div class="lightbox-inner" id="lightboxInner" tabindex="0">
       <!-- Le média actif sera injecté ici -->
     </div>
   </div>
@@ -1372,6 +1381,9 @@
 
     let currentMediaList = [];
     let currentIndex = 0;
+    
+const COMMIT_PX = 60;    // seuil "fixe" en pixels pour valider l'intention
+const COMMIT_RATIO = 0.12; // ou 12% de la largeur du viewport (à toi d'ajuster)
 
     let startX = 0;
     let startY = 0;
@@ -1398,14 +1410,14 @@ function renderAllMedia() {
       slide.appendChild(video);
       // quand la metadata est prête, on recale (utile si la taille influe)
       video.addEventListener("loadedmetadata", () => {
-        if (index === currentIndex) updateSliderPosition();
+        if (index === currentIndex && !isDragging) updateSliderPosition();
       });
     } else {
       const img = document.createElement("img");
       img.src = src;
       // idem : recalage quand l'image est prête
       img.addEventListener("load", () => {
-        if (index === currentIndex) updateSliderPosition();
+        if (index === currentIndex && !isDragging) updateSliderPosition();
       });
       slide.appendChild(img);
     }
@@ -1481,50 +1493,258 @@ function renderAllMedia() {
     
 
   </script>
-  <script>
-    
-let isMouseDragging = false;
-let startX_desktop = 0;
-let startScrollLeft = 0;
 
-lightboxInner.addEventListener('dragstart', (e) => e.preventDefault());
 
-lightboxInner.addEventListener('mousedown', (e) => {
-  if (e.button !== 0) return; // clic gauche only
-  isMouseDragging = true;
-  startX_desktop = e.clientX;
-  startScrollLeft = lightboxInner.scrollLeft;
-  lightboxInner.classList.add('dragging');
-  e.preventDefault();
-});
+<script>
+(() => {
+  const LOG = (...args) => console.log('[carousel-mouse]', ...args);
 
-window.addEventListener('mousemove', (e) => {
-  if (!isMouseDragging) return;
-  if (e.buttons === 0) { // sécurité
-    isMouseDragging = false;
-    lightboxInner.classList.remove('dragging');
-    snapToNearest();
-    return;
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMouseDragPointer);
+  } else {
+    initMouseDragPointer();
   }
-  const dx = e.clientX - startX_desktop;
-  lightboxInner.scrollLeft = startScrollLeft - dx;
-}, { passive: true });
 
-window.addEventListener('mouseup', () => {
-  if (!isMouseDragging) return;
-  isMouseDragging = false;
-  lightboxInner.classList.remove('dragging');
-  snapToNearest();
-});
+  
+// Seuils d'intention (tu peux ajuster)
+const COMMIT_PX = 60;        // px mini
+const COMMIT_RATIO = 0.12;   // ou 12% de la largeur
 
-function snapToNearest() {
-  const slideWidth = lightboxInner.clientWidth;
-  currentIndex = Math.round(lightboxInner.scrollLeft / slideWidth);
-  currentIndex = Math.max(0, Math.min(currentMediaList.length - 1, currentIndex));
-  updateSliderPosition();
+function computeIntentionTargetIndex(dx) {
+  const inner = document.getElementById('lightboxInner');
+  const width = inner.clientWidth;
+  const threshold = Math.min(COMMIT_PX, width * COMMIT_RATIO);
+
+  let targetIndex = currentIndex; // par défaut on reste
+  if (dx <= -threshold && currentIndex < currentMediaList.length - 1) {
+    targetIndex = currentIndex + 1; // glisser vers la gauche
+  } else if (dx >= threshold && currentIndex > 0) {
+    targetIndex = currentIndex - 1; // glisser vers la droite
+  }
+
+  console.log('[carousel-intent]', { dx, threshold, from: currentIndex, to: targetIndex });
+  return targetIndex;
 }
 
-  </script>
+// (Optionnel) si tu veux garder une API "snapToIntention" pour desktop :
+function snapToIntentionDesktop(dx) {
+  const targetIndex = computeIntentionTargetIndex(dx);
+  currentIndex = targetIndex;
+  scrollToIndexDesktop(targetIndex, { duration: 260 });
+}
+
+  function initMouseDragPointer() {
+    const inner = document.getElementById('lightboxInner');
+    if (!inner) return;
+
+    if (!inner.hasAttribute('tabindex')) inner.setAttribute('tabindex', '0');
+    inner.addEventListener('dragstart', (e) => e.preventDefault());
+
+    let dragging = false;
+    let intented = false;
+    let startX = 0;
+    let startScrollLeft = 0;
+    const INTENT_PX = 6;
+
+    
+function setDragging(on) {
+  inner.classList.toggle('dragging', !!on);
+  if (on) {
+    // Pendant le drag desktop
+    isDragging = true;                  // <- flag commun (mobile non impacté)
+    inner.style.scrollBehavior = 'auto';
+    inner.style.scrollSnapType = 'none'; // <- on coupe le snap ici
+    document.body.style.cursor = 'grabbing';
+  } else {
+    // Fin de drag desktop
+    isDragging = false;                 // <- il faut le mettre à false AVANT l'anim
+    inner.style.scrollBehavior = '';
+    // ⚠️ NE PAS restaurer scrollSnapType ici, l’animateur s’en charge.
+    document.body.style.cursor = '';
+  }
+}
+    // PointerDown : souris uniquement
+    inner.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+
+      // Éviter éléments interactifs (liens/inputs/contrôles vidéo)
+      const interactive = e.target.closest('a, button, input, textarea, select, summary, label, video');
+      if (interactive) return;
+
+      dragging = true;
+      intented = false;
+      startX = e.clientX;
+      startScrollLeft = inner.scrollLeft;
+
+      // capture : garantit la réception des events jusqu'au pointerup
+      inner.setPointerCapture(e.pointerId);
+      setDragging(true);
+
+      LOG('pointerdown', { startX, startScrollLeft });
+      e.preventDefault();
+    });
+
+    // PointerMove : souris uniquement
+    inner.addEventListener('pointermove', (e) => {
+      if (!dragging || e.pointerType !== 'mouse') return;
+
+      const dx = e.clientX - startX;
+
+      if (!intented && Math.abs(dx) >= INTENT_PX) {
+        intented = true;
+        LOG('intent reached');
+      }
+
+      if (intented) {
+        inner.scrollLeft = startScrollLeft - dx;
+        // LOG('scrollLeft', inner.scrollLeft); // décommente si besoin
+      }
+    }, { passive: true });
+
+    // Fin du drag (pointerup/cancel)
+    const end = (e) => {
+      if (!dragging) return;
+      dragging = false;
+
+      // relâcher la capture si active
+      try { if (e && e.pointerId != null) inner.releasePointerCapture(e.pointerId); } catch {}
+
+      setDragging(false);
+
+      if (!intented) {
+        LOG('pointerup (clic simple) — pas de snap');
+        return;
+      }      
+
+const dx = (e && e.clientX != null) ? (e.clientX - startX) : 0;
+LOG('pointerup -> snapToIntention', { dx });
+const targetIndex = computeIntentionTargetIndex(dx);
+currentIndex = targetIndex;
+// 🔔 Animation desktop : depuis la position ACTUELLE -> slide cible
+scrollToIndexDesktop(targetIndex, { duration: 260 });
+
+    };
+
+    inner.addEventListener('pointerup', end);
+    inner.addEventListener('pointercancel', end);
+
+    
+function snapToIntention(dx) {
+  const width = inner.clientWidth;
+  const threshold = Math.min(COMMIT_PX, width * COMMIT_RATIO);
+
+  let targetIndex = currentIndex; // par défaut, on reste
+
+  if (dx <= -threshold && currentIndex < currentMediaList.length - 1) {
+    // glissé vers la gauche -> slide suivante
+    targetIndex = currentIndex + 1;
+  } else if (dx >= threshold && currentIndex > 0) {
+    // glissé vers la droite -> slide précédente
+    targetIndex = currentIndex - 1;
+  }
+
+  LOG('snapToIntention', {
+    dx,
+    threshold,
+    from: currentIndex,
+    to: targetIndex
+  });
+
+  currentIndex = targetIndex;
+  updateSliderPosition(); // recentre proprement sur la slide choisie
+}
+    // Snap symétrique (pas d’inertie pour stabilité)
+    function snapToNearestSymmetric() {
+      const width = inner.clientWidth;
+      let targetIndex = Math.round(inner.scrollLeft / width);
+      targetIndex = Math.max(0, Math.min(currentMediaList.length - 1, targetIndex));
+
+      LOG('snapToNearestSymmetric', {
+        scrollLeft: inner.scrollLeft,
+        width,
+        from: currentIndex,
+        to: targetIndex
+      });
+
+      currentIndex = targetIndex;
+      updateSliderPosition(); // recentre proprement
+    }
+
+    LOG('listeners souris (PointerEvents) initialisés');
+  }
+})();
+</script>
+
+<script>
+
+// Easing confort
+function easeOutCubic(t) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+/**
+ * Animation DESKTOP uniquement : part depuis scrollLeft ACTUEL -> index cible.
+ * - Le mobile ne passe pas ici (appelé seulement depuis la souris).
+ * - Le scroll-snap reste coupé pendant l'anim.
+ */
+function scrollToIndexDesktop(targetIndex, {
+  duration = 280,
+  easing = easeOutCubic,
+  log = false
+} = {}) {
+  const inner = document.getElementById('lightboxInner');
+  if (!inner) return;
+
+  const width = inner.clientWidth;
+  const start = inner.scrollLeft;              // <-- position ACTUELLE
+  const end   = Math.round(targetIndex * width);
+  const delta = end - start;
+
+  if (Math.abs(delta) < 1) {
+    inner.scrollLeft = end;
+    return;
+  }
+
+  // Laisser l’animateur maîtriser le snap (ne pas le réactiver trop tôt)
+  const prevSnap = inner.style.scrollSnapType;
+  const prevBehavior = inner.style.scrollBehavior;
+
+  inner.style.scrollSnapType = 'none';  // <-- on s'assure que c'est bien coupé
+  inner.style.scrollBehavior = 'auto';
+
+  const t0 = performance.now();
+  let rafId = null;
+
+  function cleanup() {
+    if (rafId) cancelAnimationFrame(rafId);
+    inner.style.scrollSnapType = prevSnap || '';     // <-- restauré uniquement ici
+    inner.style.scrollBehavior = prevBehavior || '';
+  }
+
+  function step(now) {
+    // Si l'utilisateur relance un drag (desktop), on stoppe l'anim
+    if (isDragging) { cleanup(); return; }    // <-- utilise le bon flag
+
+    const t = Math.min(1, (now - t0) / duration);
+    const p = easing(t);
+    inner.scrollLeft = start + delta * p;
+
+    if (t < 1) {
+      rafId = requestAnimationFrame(step);
+    } else {
+      inner.scrollLeft = end; // verrouille exactement
+      cleanup();
+    }
+  }
+
+  if (log) console.log('[carousel-anim-desktop] from', start, 'to', end, 'delta', delta);
+  rafId = requestAnimationFrame(step);
+}
+
+</script>
+
+
+
 <script>
 
   // --- Clavier: flèches gauche/droite ---
@@ -1558,5 +1778,7 @@ function snapToNearest() {
   <script src="./js/challenge.js"></script>
   <script src="./js/visitor-tracking.js"></script>
   <script src="./js/download.js"></script>
+
+
 </body>
 </html>
