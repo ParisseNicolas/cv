@@ -646,13 +646,6 @@
   .main-card {
     grid-column: 2;
   }
-
-  /* Hero sticky */
-  .card--hero.sidebar-card {
-    position: sticky;
-    top: 30px;
-    z-index: 10;
-  }
 }
 
 
@@ -775,10 +768,147 @@
 
 
 
+/* ===== Sticky "empilés" dans la sidebar (desktop only) ===== */
+@media (min-width: 1024px) {
+  /*
+    Ajuste ces valeurs si besoin (en px)
+    - --sticky-gap : l'espace entre les cartes
+    - --hero-top   : marge du hero depuis le haut de la page
+    - --hero-h     : hauteur approximative de la carte hero
+    - --lang-h     : hauteur approximative de la carte langues
+  */
+  :root {
+    --sticky-gap: 10px;
+    --hero-top: 10px;
+    --hero-h: 300px;   /* ajuste si ton hero est plus/moins haut */
+    --lang-h: 200px;   /* ajuste selon la hauteur de ta carte Langues */
+  }
+  
+  /* Hero: déjà sticky, on s'assure de la valeur */
+  .card--hero.sidebar-card {
+    position: sticky;
+    top: var(--hero-top);
+    z-index: 10;
+  }
+
+  /* Langues: collée juste sous le Hero */
+  .sidebar-card.langues-sticky {
+    position: sticky;
+    top: calc(var(--hero-top) + var(--hero-h) + var(--sticky-gap));
+    z-index: 10;
+  }
+
+  /* Contact: collée juste sous Langues */
+  .sidebar-card.contact-sticky {
+    position: sticky;
+    top: calc(
+      var(--hero-top) + var(--hero-h) + var(--sticky-gap) +
+      var(--lang-h) + var(--sticky-gap)
+    );
+    z-index: 10;
+  }
+}
 
 
 
 
+/* ===== Download: centrage parfait et respiration (desktop) ===== */
+@media (min-width: 1024px) {
+
+  /* On garde 2 colonnes ; on centre le contenu de chaque colonne */
+  .download-card .download-layout {
+    grid-template-columns: 1fr auto;
+    align-items: center;    /* centre verticalement les deux colonnes entre elles */
+    column-gap: 20px;       /* rapproche (tu peux descendre à 16px) */
+    padding-inline: 6px;    /* petit air contre les bords de la card */
+  }
+
+  /* Colonne miniature (gauche) : miniature centrée dans sa colonne */
+  .download-card .dl-left {
+    display: flex;
+    justify-content: center; /* centre horizontalement la miniature */
+    padding-inline: 6px;     /* évite l'effet bord */
+  }
+
+  /* Colonne droite (QR + bouton) : parfaitement centrés l'un sous l'autre */
+  .download-card .dl-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;     /* centre horizontalement QR + bouton dans la colonne */
+    gap: 12px;
+    padding-inline: 6px;     /* évite l'effet bord */
+  }
+
+  /* Dimensions harmonieuses pour renforcer le centrage visuel */
+  .pdf-thumb {
+    max-width: 300px;        /* ajuste si tu veux */
+  }
+  .qr-img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+  }
+
+  /* Bouton "joli" centré (il l'est via align-items:center, mais on sécurise) */
+  .download-button {
+    text-align: center;
+    padding-inline: 20px;
+    border-radius: 14px;
+    color: #fff !important;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--primary) 92%, #ffffff 8%), var(--primary));
+    box-shadow: 0 8px 18px rgba(60, 111, 209, .22);
+    font-weight: 700;
+    transition: transform .06s ease, box-shadow .2s ease, background-color .2s ease;
+  }
+  .download-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(60, 111, 209, .28);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--primary) 96%, #ffffff 4%), var(--primary));
+  }
+  .download-button:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 14px rgba(60, 111, 209, .22);
+  }
+  .download-button:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--primary) 70%, #ffffff 30%);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 3px rgba(92, 200, 255, .25), 0 8px 18px rgba(60, 111, 209, .22);
+  }
+}
+
+@media (min-width: 1024px) {
+  
+.lightbox-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+
+  /* autoriser le carrousel horizontal */
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  /* IMPORTANT : pas de padding, pour que scrollLeft = index * width soit exact */
+  padding: 0;
+
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;           /* masque la barre (Firefox) */
+}
+.lightbox-inner::-webkit-scrollbar { display: none; } /* masque (WebKit) */
+
+/* Confort drag souris */
+.lightbox-inner, .lightbox-slide, .lightbox-slide img, .lightbox-slide video {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+
+.lightbox-inner { cursor: grab; }
+.lightbox-inner.dragging { cursor: grabbing; }
+
+}
 
   </style>
 </head>
@@ -919,7 +1049,7 @@
       </section>
 
       <!-- LANGUES -->
-      <section class="card sidebar-card">
+      <section class="card sidebar-card langues-sticky">
         <div class="card-inner">
           <div class="section-label">Langues</div>
           <div class="section-title">
@@ -940,17 +1070,7 @@
 
             <div class="mini-row">
               <div>
-                <div class="mini-label">Anglais écrit</div>
-                <div class="lang-note">C1</div>
-              </div>
-              <div class="bar" style="--level: 0.9;">
-                <div class="bar-fill"></div>
-              </div>
-            </div>
-
-            <div class="mini-row">
-              <div>
-                <div class="mini-label">Anglais oral</div>
+                <div class="mini-label">Anglais</div>
                 <div class="lang-note">C1</div>
               </div>
               <div class="bar" style="--level: 0.8;">
@@ -1148,7 +1268,7 @@
 
 
       <!-- CONTACT -->
-      <section class="card sidebar-card">
+      <section class="card sidebar-card contact-sticky">
         <div class="card-inner">
           <div class="section-label">Contact</div>
           <div class="section-title">
@@ -1259,45 +1379,55 @@
 
     const SWIPE_THRESHOLD = 60; // pixels
 
-    function renderAllMedia() {
-      lightboxInner.innerHTML = "";
-      currentMediaList.forEach((src, index) => {
-        const slide = document.createElement("div");
-        slide.className = "lightbox-slide";
+    
+function renderAllMedia() {
+  lightboxInner.innerHTML = "";
 
-        if (src.endsWith(".mp4")) {
-          const video = document.createElement("video");
-          video.src = src;
-          video.controls = true;
-          video.muted = true;
-          video.playsInline = true;
-          video.autoplay = index === currentIndex;
-          slide.appendChild(video);
-        } else {
-          const img = document.createElement("img");
-          img.src = src;
-          slide.appendChild(img);
-        }
-        lightboxInner.appendChild(slide);
+  // 1) créer les slides
+  currentMediaList.forEach((src, index) => {
+    const slide = document.createElement("div");
+    slide.className = "lightbox-slide";
+
+    if (src.endsWith(".mp4")) {
+      const video = document.createElement("video");
+      video.src = src;
+      video.controls = true;
+      video.muted = true;
+      video.playsInline = true;
+      video.autoplay = index === currentIndex;
+      slide.appendChild(video);
+      // quand la metadata est prête, on recale (utile si la taille influe)
+      video.addEventListener("loadedmetadata", () => {
+        if (index === currentIndex) updateSliderPosition();
       });
-      updateSliderPosition();
-      
-      // Lancer la vidéo du slide courant après un court délai
-      setTimeout(() => {
-        const currentSlide = lightboxInner.children[currentIndex];
-        const video = currentSlide.querySelector('video');
-        if (video) {
-          video.play().catch(() => {
-            // L'autoplay a peut-être échoué, c'est ok
-          });
-        }
-      }, 100);
+    } else {
+      const img = document.createElement("img");
+      img.src = src;
+      // idem : recalage quand l'image est prête
+      img.addEventListener("load", () => {
+        if (index === currentIndex) updateSliderPosition();
+      });
+      slide.appendChild(img);
     }
 
+    lightboxInner.appendChild(slide);
+  });
+
+  // 2) premier calage immédiatement après insertion
+  updateSliderPosition();
+
+  // 3) second calage au frame suivant (après paint)
+  requestAnimationFrame(() => updateSliderPosition());
+
+  // 4) dernier filet de sécurité (après que le layout se stabilise)
+  setTimeout(updateSliderPosition, 120);
+}
+
+    
     function updateSliderPosition() {
-      const slide = lightboxInner.children[currentIndex];
-      slide.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
+      const slideWidth = lightboxInner.clientWidth; // chaque .lightbox-slide = width:100%
+      lightboxInner.scrollLeft = currentIndex * slideWidth;
+}
 
     function openLightbox(mediaList, index = 0) {
       currentMediaList = mediaList;
@@ -1347,7 +1477,83 @@
       
       updateSliderPosition();
     }, { passive: true });
+  
+    
+
   </script>
+  <script>
+    
+let isMouseDragging = false;
+let startX_desktop = 0;
+let startScrollLeft = 0;
+
+lightboxInner.addEventListener('dragstart', (e) => e.preventDefault());
+
+lightboxInner.addEventListener('mousedown', (e) => {
+  if (e.button !== 0) return; // clic gauche only
+  isMouseDragging = true;
+  startX_desktop = e.clientX;
+  startScrollLeft = lightboxInner.scrollLeft;
+  lightboxInner.classList.add('dragging');
+  e.preventDefault();
+});
+
+window.addEventListener('mousemove', (e) => {
+  if (!isMouseDragging) return;
+  if (e.buttons === 0) { // sécurité
+    isMouseDragging = false;
+    lightboxInner.classList.remove('dragging');
+    snapToNearest();
+    return;
+  }
+  const dx = e.clientX - startX_desktop;
+  lightboxInner.scrollLeft = startScrollLeft - dx;
+}, { passive: true });
+
+window.addEventListener('mouseup', () => {
+  if (!isMouseDragging) return;
+  isMouseDragging = false;
+  lightboxInner.classList.remove('dragging');
+  snapToNearest();
+});
+
+function snapToNearest() {
+  const slideWidth = lightboxInner.clientWidth;
+  currentIndex = Math.round(lightboxInner.scrollLeft / slideWidth);
+  currentIndex = Math.max(0, Math.min(currentMediaList.length - 1, currentIndex));
+  updateSliderPosition();
+}
+
+  </script>
+<script>
+
+  // --- Clavier: flèches gauche/droite ---
+  lightbox.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' && currentIndex < currentMediaList.length - 1) {
+      currentIndex++;
+      updateSliderPosition();
+      e.preventDefault();
+    }
+    if (e.key === 'ArrowLeft' && currentIndex > 0) {
+      currentIndex--;
+      updateSliderPosition();
+      e.preventDefault();
+    }
+    if (e.key === 'Escape') {
+      closeLightbox();
+      e.preventDefault();
+    }
+  });
+
+  // Donne le focus à l'ouverture pour capter le clavier
+  const _openLightboxOriginal = openLightbox;
+  openLightbox = function(mediaList, index = 0) {
+    _openLightboxOriginal(mediaList, index);
+    // Focus après affichage
+    setTimeout(() => lightboxInner.focus(), 0);
+  };
+</script>
+
   <script src="./js/sendNotification.js"></script>
   <script src="./js/challenge.js"></script>
   <script src="./js/visitor-tracking.js"></script>
