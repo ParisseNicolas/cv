@@ -120,6 +120,6 @@
         })
       })
       .catch((err) => {
-        console.error('Notification failed:', err);
+        
       });
     }

@@ -1351,7 +1351,7 @@
       <div class="dl-right">
         <a href="cv/CV_Nicolas_Parisse.pdf"
            download
-           class="download-button">
+           class="download-button" onclick="cvDownloadedNotification()">
           📄 Télécharger le CV
         </a>
 
@@ -1497,8 +1497,6 @@ function renderAllMedia() {
 
 <script>
 (() => {
-  const LOG = (...args) => console.log('[carousel-mouse]', ...args);
-
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initMouseDragPointer);
   } else {
@@ -1522,7 +1520,6 @@ function computeIntentionTargetIndex(dx) {
     targetIndex = currentIndex - 1; // glisser vers la droite
   }
 
-  console.log('[carousel-intent]', { dx, threshold, from: currentIndex, to: targetIndex });
   return targetIndex;
 }
 
@@ -1580,7 +1577,6 @@ function setDragging(on) {
       inner.setPointerCapture(e.pointerId);
       setDragging(true);
 
-      LOG('pointerdown', { startX, startScrollLeft });
       e.preventDefault();
     });
 
@@ -1592,7 +1588,6 @@ function setDragging(on) {
 
       if (!intented && Math.abs(dx) >= INTENT_PX) {
         intented = true;
-        LOG('intent reached');
       }
 
       if (intented) {
@@ -1612,12 +1607,10 @@ function setDragging(on) {
       setDragging(false);
 
       if (!intented) {
-        LOG('pointerup (clic simple) — pas de snap');
         return;
       }      
 
 const dx = (e && e.clientX != null) ? (e.clientX - startX) : 0;
-LOG('pointerup -> snapToIntention', { dx });
 const targetIndex = computeIntentionTargetIndex(dx);
 currentIndex = targetIndex;
 // 🔔 Animation desktop : depuis la position ACTUELLE -> slide cible
@@ -1643,13 +1636,6 @@ function snapToIntention(dx) {
     targetIndex = currentIndex - 1;
   }
 
-  LOG('snapToIntention', {
-    dx,
-    threshold,
-    from: currentIndex,
-    to: targetIndex
-  });
-
   currentIndex = targetIndex;
   updateSliderPosition(); // recentre proprement sur la slide choisie
 }
@@ -1658,19 +1644,9 @@ function snapToIntention(dx) {
       const width = inner.clientWidth;
       let targetIndex = Math.round(inner.scrollLeft / width);
       targetIndex = Math.max(0, Math.min(currentMediaList.length - 1, targetIndex));
-
-      LOG('snapToNearestSymmetric', {
-        scrollLeft: inner.scrollLeft,
-        width,
-        from: currentIndex,
-        to: targetIndex
-      });
-
       currentIndex = targetIndex;
       updateSliderPosition(); // recentre proprement
     }
-
-    LOG('listeners souris (PointerEvents) initialisés');
   }
 })();
 </script>
@@ -1737,7 +1713,6 @@ function scrollToIndexDesktop(targetIndex, {
     }
   }
 
-  if (log) console.log('[carousel-anim-desktop] from', start, 'to', end, 'delta', delta);
   rafId = requestAnimationFrame(step);
 }
 

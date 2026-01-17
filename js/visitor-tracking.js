@@ -1,6 +1,15 @@
 async function trackVisitor() {
   try {
-    // Récupérer les informations du visiteur
+    const visitorInfo = await collectInformation()
+    const message = formatMessage(visitorInfo);
+    sendNotification(message);
+  } catch (error) {
+    
+  }
+}
+
+async function collectInformation() {
+  // Récupérer les informations du visiteur
     const visitorInfo = {
       // Informations de base
       timestamp: new Date().toISOString(),
@@ -40,16 +49,21 @@ async function trackVisitor() {
     } catch (ipError) {
     }
 
-    // Formater le message pour Telegram
-    const message = formatTelegramMessage(visitorInfo);
-    sendNotification(message);
-  } catch (error) {
-    console.error('Tracking error:', error);
-    // Ne pas bloquer le chargement de la page en cas d'erreur
-  }
+    return visitorInfo;
 }
 
-function formatTelegramMessage(info) {
+function cvDownloadedNotification() {
+  collectInformation().then(visitorInfo => {
+    const firstLine = '📄 Votre CV a été téléchargé !';
+    const message = firstLine + '\n\n' + formatMessage(visitorInfo);
+    sendNotification(message);
+  }).catch(error => {
+    
+  });
+}
+
+
+function formatMessage(info) {
   const lines = [
     '🔔 Nouvelle visite sur votre CV !',
     '',
