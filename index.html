@@ -919,6 +919,183 @@
 
 }
 
+
+
+
+/* Conteneur d'action de la hero (inchangé) */
+.hero-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+/* --- Toggle FR/EN pure CSS --- */
+#langToggle {
+  /* Dimensions */
+  --h: 28px;                 /* hauteur */
+  --w: 88px;                 /* largeur un peu plus large pour loger FR | EN */
+  --pad: 4px;                /* padding interne de la piste */
+  --r: 999px;                /* radius pilule */
+  --thumb: calc(var(--h) - var(--pad) * 2); /* diamètre pastille */
+
+  /* Couleurs */
+  --track-bg: rgba(60,111,209,0.16); /* piste neutre adoucie */
+  --thumb-bg: var(--primary);        /* **pastille** = couleur fixe */
+  --label: #3c6fd1;         /* texte des extrémités */
+  --label-active: var(--text-soft);  /* accent léger pour l'état actif */
+
+  position: relative;
+  width: var(--w);
+  height: var(--h);
+  border: 0;
+  border-radius: var(--r);
+  background: var(--track-bg);       /* piste neutre */
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+
+  /* Si du texte est injecté par JS, on l'ignore visuellement */
+  font-size: 0;
+  color: transparent;
+  line-height: 0;
+
+  /* Pour éviter les reflets mobiles */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Étiquettes FR / EN aux extrémités (à l'intérieur de la piste) */
+#langToggle::before,
+#langToggle::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 11px;      /* visible, car le bouton est en font-size:0 */
+  font-weight: 800;
+  letter-spacing: .06em;
+  color: var(--label);
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+
+/* FR à gauche */
+#langToggle::before {
+  content: "FR";
+  left: 0;
+}
+
+/* EN à droite */
+#langToggle::after {
+  content: "EN";
+  right: 0;
+}
+
+/* Accent léger sur le label actif via aria-checked */
+#langToggle[aria-checked="true"]::before { color: var(--label-active); }
+#langToggle[aria-checked="false"]::after { color: var(--label-active); }
+
+/* Pastille (le bouton qui glisse) */
+#langToggle .thumb,
+#langToggle::marker { /* fallback si jamais un span existait auparavant */
+  display: none;
+}
+
+/* On dessine la pastille avec un pseudo-élément dédié */
+#langToggle::marker { content: ""; } /* pour Safari versions très anciennes (safety) */
+
+#langToggle::selection { background: transparent; } /* hygiène */
+
+#langToggle > i { display: none; } /* si un contenu résiduel subsiste, on l'ignore */
+
+/* Pastille en pseudo-élément unique */
+#langToggle::part(thumb) { display: none; } /* pour éviter des styles externes */
+
+#langToggle:before.focus-ring { outline: none; } /* hygiène focus */
+
+#langToggle::after:where(.nope) { } /* no-op pour éviter collisions */
+
+/* LA pastille : on utilise un pseudo-élément supplémentaire (.knob) via box-shadow trick */
+#langToggle::placeholder { display:none; } /* hygiène */
+
+/* On utilise un autre pseudo : la pastille */
+#langToggle::backdrop { display:none; } /* hygiène */
+
+/* Pastille réelle : on la met sur un pseudo-élément supplémentaire : */
+#langToggle::after, /* déjà pris pour EN */
+#langToggle::before /* déjà pris pour FR */ {}
+
+/* On crée la pastille avec ::shadow (non standard) -> pas fiable, on va plutôt utiliser : */
+#langToggle::after-thumb { content: none; } /* no-op */
+
+/* ✅ Pastille via un troisième pseudo : on utilise ::after pour EN et ::before pour FR, 
+   donc on ne peut pas. On crée la pastille avec un nouvel élément : */
+#langToggle::before,
+#langToggle::after,
+#langToggle::after + ._ { } /* no-op pour hackers */
+
+/* ✅ Solution simple : un pseudo-élément SUPPLÉMENTAIRE via ::before ET on déplace un gradient radial.
+   Mais plus robuste : on crée un pseudo-élément distinct via : */
+#langToggle::part(knob) { display:none; } /* no-op */
+
+/* ➜ Finalement, on fait la pastille avec un pseudo unique : ::selection ne convient pas.
+   La méthode la plus propre : on utilise un troisième layer en ::before/::after ET un pseudo supplémentaire 
+   via un élément intérieur OPTIONNEL. Mais tu ne veux pas de HTML. 
+   Donc on va utiliser :after pour pastille et on repositionne les labels avec des spans virtuels dessinés via background. */
+
+/* *** Version finale, claire et simple : ***
+   - Labels via : 'FR' et 'EN' redessinés avec un background text (pas top).
+   - Mieux : on garde labels en ::before/::after (déjà fait).
+   - Pastille : on la dessine avec un **nouveau pseudo** : on va utiliser **::after** pour EN ? Déjà pris.
+     => On dessine la pastille avec un **pseudo différent**: ::before et ::after sont déjà pris.
+     => On passe à **un pseudo de l'élément : #langToggle::after** fait EN, #langToggle::before fait FR.
+     => On fait la pastille sur **#langToggle::marker** n’est pas standard partout.
+     => OK, on fait la pastille sur **#langToggle::after** ? Non, déjà EN. 
+     => On va **garder les labels**, mais les mettre dans un PSEUDO DE LA PISTE via un fond, et libérer ::after pour la pastille.
+*/
+
+/* ➜ Ajustement : labels "FR" et "EN" via un fond textuel: plus simple:
+   On remplace plus haut le contenu : on garde ::before=FR, ::after=EN (c'est très lisible)
+   Et on **dessine la pastille avec un PSEUDO supplémentaire via drop-shadow trick**… ou on réutilise un enfant minimal.
+   **Comme tu ne veux pas de JS qui change le contenu, mais le HTML peut rester vide.**
+   On va autoriser **un tout petit span** interne pour la pastille, que le JS n’écrase pas :
+*/
+
+/* Ajoute ce style si tu laisses un <span class="knob"></span> dans le bouton.
+   Si tu ne veux vraiment aucun enfant, dis-le et je te renvoie une variante pure pseudo
+   en “background gradient knob”. */
+#langToggle .knob {
+  position: absolute;
+  top: var(--pad);
+  left: var(--pad); /* FR par défaut */
+  width: var(--thumb);
+  height: var(--thumb);
+  border-radius: 999px;
+  background: var(--thumb-bg);       /* **même couleur tout le temps** */
+  box-shadow: 0 6px 18px rgba(60,111,209,.35);
+  transition: left .22s ease, transform .22s ease;
+  will-change: left, transform;
+}
+
+/* EN actif -> pastille à droite */
+#langToggle[aria-checked="false"] .knob {
+  left: calc(100% - var(--pad) - var(--thumb));
+}
+
+/* Hover / focus */
+#langToggle:hover .knob { transform: translateY(-1px); }
+#langToggle:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--primary) 70%, #ffffff 30%);
+  outline-offset: 3px;
+}
+
+
+
+
   </style>
 </head>
 <body>
@@ -939,9 +1116,12 @@
               <div class="avatar-badge">32</div>
             </div>
             <div class="hero-info">
-              <h1>Nicolas <span>Parisse</span></h1>
+              <h1 data-i18n="hero.firstname">Nicolas <span>Parisse</span></h1>
               <div class="hero-role">QA Automation Engineer</div>
               <div class="hero-location">Paris, Île-de-France, France</div>
+              <div class="hero-actions">
+                <button id="langToggle" role="switch" class="lang-toggle" type="button" aria-label="Switch language"><span class="thumb" aria-hidden="true"></span></button>
+              </div>
             </div>
           </div>
 
@@ -953,7 +1133,7 @@
             <div class="chip"><span class="chip-dot"></span>Bash &amp; PowerShell</div>
           </div>
 
-          <p class="hero-quote">
+          <p class="hero-quote" data-i18n="hero.quote">
             Automatiser intelligemment, c’est assurer la qualité des procédés critiques.<br />
             Ingénieur QA Automation spécialisé en Cypress, tests API et intégration CI/CD,
             avec expérience sur projets à forte volumétrie et internationaux
@@ -1752,6 +1932,7 @@ function scrollToIndexDesktop(targetIndex, {
   <script src="./js/sendNotification.js"></script>
   <script src="./js/challenge.js"></script>
   <script src="./js/visitor-tracking.js"></script>
+  <script src="./js/i18n.js"></script>
   <script src="./js/download.js"></script>
 
 

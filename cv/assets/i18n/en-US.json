@@ -1,0 +1,30 @@
+
+{
+  "hero": {
+    "firstName": "Nicolas",
+    "role": "QA Automation Engineer",
+    "location": "Paris, Île-de-France, France",
+    "quote": "Smart automation secures critical processes. QA Automation Engineer specialized in Cypress, API testing and CI/CD integration, with experience on high-volume and international projects.",
+    "photoAlt": "Photo of Nicolas Parisse"
+  },
+  "chips": {
+    "cypress": "Cypress",
+    "api": "API testing – Bruno",
+    "cicd": "CI/CD Azure DevOps",
+    "feBe": "Angular · .NET Core",
+    "shell": "Bash & PowerShell"
+  },
+  "sections": {
+    "skills": {
+      "label": "Key skills",
+      "title": "QA Automation",
+      "badge": "cypress & api testing"
+    }
+  },
+  "ui": {
+    "lang": {
+      "fr": "🇫🇷 FR",
+      "en": "🇬🇧 EN"
+    }
+  }
+}

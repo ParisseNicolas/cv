@@ -1,0 +1,30 @@
+
+{
+  "hero": {
+    "firstName": "Nicolas",
+    "role": "QA Automation Engineer",
+    "location": "Paris, Île-de-France, France",
+    "quote": "Automatiser intelligemment, c’est assurer la qualité des procédés critiques. Ingénieur QA Automation spécialisé en Cypress, tests API et intégration CI/CD, avec expérience sur projets à forte volumétrie et internationaux.",
+    "photoAlt": "Photo de Nicolas Parisse"
+  },
+  "chips": {
+    "cypress": "Cypress",
+    "api": "Tests API – Bruno",
+    "cicd": "CI/CD Azure DevOps",
+    "feBe": "Angular · .NET Core",
+    "shell": "Bash & PowerShell"
+  },
+  "sections": {
+    "skills": {
+      "label": "Compétences clés",
+      "title": "QA Automation",
+      "badge": "cypress & tests API"
+    }
+  },
+  "ui": {
+    "lang": {
+      "fr": "🇫🇷 FR",
+      "en": "🇬🇧 EN"
+    }
+  }
+}
