@@ -74,9 +74,18 @@
       "button": "📄 Download the CV"
     },
     "download": {
-      "label": "Download",
-      "title": "Classic Version <span>PDF</span>",
-      "badge": "PDF"
+      "cv": {
+        "label": "Download",
+        "title": "Classic Version <span>PDF</span>",
+        "badge": "PDF",
+        "button":"📄 Download the CV"
+      },
+      "DossierComplet" : {
+        "label": "Download",
+        "title": "Career portfolio <span>PDF</span>",
+        "badge": "PDF",
+        "button":"📄 Download the portfolio"
+      }
     }
   },
   "skills": {

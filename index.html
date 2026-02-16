@@ -1113,7 +1113,6 @@
           <div class="hero-header">
             <div class="avatar">
               <img src="cv/images/photo2.png" alt="Photo de Nicolas Parisse" />
-              <div class="avatar-badge" data-i18n="hero.age">32</div>
             </div>
             <div class="hero-info">
               <h1><span data-i18n="hero.firstname">Nicolas</span> <span>Parisse</span></h1>
@@ -1555,7 +1554,7 @@
         </div>
       </a>
 
-      <a class="contact-item" href="https://www.google.com/maps?q=Paris+12e" target="_blank" rel="noopener noreferrer"></a>
+      <a class="contact-item" href="https://www.google.com/maps?q=Paris+12e" target="_blank" rel="noopener noreferrer">
         <div class="contact-icon">📍</div>
         <div>
           <div class="contact-label" data-i18n="contact.location.label">Localisation</div>
@@ -1574,8 +1573,8 @@
       <section class="card main-card download-card">
         <div class="card-inner">
 
-          <div class="section-label" data-i18n="sections.download.label">Téléchargement</div>
-    <div class="section-title" data-i18n="sections.download.title" data-i18n-html="true">
+          <div class="section-label" data-i18n="sections.download.cv.label">Téléchargement</div>
+          <div class="section-title" data-i18n="sections.download.cv.title" data-i18n-html="true">
             Version classique
             <span>PDF</span>
           </div>
@@ -1590,7 +1589,28 @@
               <a href="cv/CV_Nicolas_Parisse.pdf"
            download
            class="download-button" onclick="cvDownloadedNotification()">
-                <span data-i18n="download.cta">📄 Télécharger le CV</span>
+                <span data-i18n="sections.download.cv.button">📄 Télécharger le CV</span>
+              </a>
+
+            </div>
+          </div>
+          <br/>
+          <div class="section-title" data-i18n="sections.download.DossierComplet.title" data-i18n-html="true">
+            Dossier de compétences
+            <span>PDF</span>
+          </div>
+          <div class="download-layout">
+            <div class="dl-left">
+              <img src="cv/images/dossierCompetencesPreview.png" 
+             alt="Aperçu du CV PDF" 
+             class="pdf-thumb"/>
+            </div>
+
+            <div class="dl-right">
+              <a href="cv/Dossier_de_compétence.pdf"
+           download
+           class="download-button" onclick="cvDownloadedNotification()">
+                <span data-i18n="sections.download.DossierComplet.button">📄 Télécharger le dossier de compétences</span>
               </a>
 
             </div>

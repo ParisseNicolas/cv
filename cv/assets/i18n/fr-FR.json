@@ -73,10 +73,18 @@
       "badge": "disponible pour échange"
     },
     "download": {
-      "label": "Téléchargement",
-      "title": "Version classique <span>PDF</span>",
-      "badge": "PDF",
-      "button": "📄 Télécharger le CV"
+      "cv": {
+        "label": "Téléchargement",
+        "title": "Version classique <span>PDF</span>",
+        "badge": "PDF",
+        "button": "📄 Télécharger le CV"
+      },
+      "DossierComplet": {
+        "label": "Téléchargement",
+        "title": "Dossier de compétences <span>PDF</span>",
+        "badge": "PDF",
+        "button": "📄 Télécharger le dossier de compétences"
+      }
     }
   },
   "skills": {
