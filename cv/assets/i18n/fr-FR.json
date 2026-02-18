@@ -8,9 +8,8 @@
     "firstname": "Nicolas",
     "role": "Ingénieur QA Automatisation",
     "location": "Paris, Île-de-France, France",
-    "quote": "Automatiser intelligemment, c’est assurer la qualité des procédés critiques. Ingénieur QA Automation spécialisé en Cypress, tests API et intégration CI/CD, avec expérience sur projets à forte volumétrie et internationaux (parcours critiques E2E, API, sécurité applicative, CI/CD intégrée).",
-    "photoAlt": "Photo de Nicolas Parisse",
-    "age": "32"
+    "quote": "Automatiser intelligemment, c’est assurer la qualité des procédés critiques. Ingénieur QA Automation spécialisé en Cypress, tests API et intégration CI/CD, avec expérience sur projets à forte volumétrie et internationaux (parcours critiques E2E, API, sécurité applicative, CI/CD intégrée). Je veux faire l'audit de votre strategy de test, l'améliorer, la contrôler, en rendre compte.",
+    "photoAlt": "Photo de Nicolas Parisse"
   },
   "chips": {
     "cypress": "Cypress",

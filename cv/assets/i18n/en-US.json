@@ -6,11 +6,10 @@
   },
   "hero": {
     "firstname": "Nicolas",
-    "role": "QA Automation Engineer",
+    "role": "QA Automation / Lead QA",
     "location": "Paris, Île-de-France, France",
-    "quote": "Smart automation is key to ensuring the quality of critical processes. QA Automation Engineer specialized in Cypress, API testing, and CI/CD integration, with experience in high-volume and international projects (critical E2E journeys, APIs, application security, integrated CI/CD).",
-    "photoAlt": "Photo of Nicolas Parisse",
-    "age": "32"
+    "quote": "Smart automation is key to ensuring the quality of critical processes. QA Automation Engineer specialized in Cypress, API testing, and CI/CD integration, with experience in high-volume and international projects (critical E2E journeys, APIs, application security, integrated CI/CD). I want to audit your test strategy, improve it, control the quality of your software, report on it.",
+    "photoAlt": "Photo of Nicolas Parisse"
   },
   "chips": {
     "cypress": "Cypress",
